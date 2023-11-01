@@ -25,6 +25,11 @@ public static class Parameter
 	public const int mustequalworking = 30;
 	public class Write
 	{
+		/// <summary>PID: 1 | Type: write</summary>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public const int clear_1 = 1;
+		/// <summary>PID: 1 | Type: write</summary>
+		public const int clear = 1;
 		/// <summary>PID: 110 | Type: write</summary>
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public const int mustbeon_110 = 110;
@@ -182,6 +187,8 @@ public static class Parameter
 }
 public class WriteParameters
 {
+	/// <summary>PID: 1  | Type: write | DISCREETS: Clear = 0</summary>
+	public System.Object Clear {get { return Protocol.GetParameter(1); }set { Protocol.SetParameter(1, value); }}
 	/// <summary>PID: 110  | Type: write | DISCREETS: Off = 0, On = 1</summary>
 	public System.Object Mustbeon {get { return Protocol.GetParameter(110); }set { Protocol.SetParameter(110, value); }}
 	/// <summary>PID: 120  | Type: write | DISCREETS: Home = 1, Office = 2, Vacation = 3</summary>
@@ -206,6 +213,8 @@ public interface SLProtocolExt : SLProtocol
 {
 	/// <summary>PID: 1000</summary>
 	PollingmanagerQActionTable pollingmanager { get; set; }
+	object Clear_1 { get; set; }
+	object Clear { get; set; }
 	object Mustbeon_10 { get; set; }
 	object Mustbeon { get; set; }
 	object Mustnotbevacation_20 { get; set; }
@@ -249,6 +258,10 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 {
 	/// <summary>PID: 1000</summary>
 	public PollingmanagerQActionTable pollingmanager { get; set; }
+	/// <summary>PID: 1  | Type: write | DISCREETS: Clear = 0</summary>
+	public System.Object Clear_1 {get { return GetParameter(1); }set { SetParameter(1, value); }}
+	/// <summary>PID: 1  | Type: write | DISCREETS: Clear = 0</summary>
+	public System.Object Clear {get { return Write.Clear; }set { Write.Clear = value; }}
 	/// <summary>PID: 10  | Type: read | DISCREETS: Off = 0, On = 1</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Mustbeon_10 {get { return GetParameter(10); }set { SetParameter(10, value); }}

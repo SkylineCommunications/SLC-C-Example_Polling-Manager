@@ -1,7 +1,6 @@
 ﻿namespace Skyline.PollingManager.Client
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using Skyline.DataMiner.Scripting;
 
@@ -9,91 +8,87 @@
     using Skyline.PollingManager.Pollable;
     using Skyline.PollingManager.Structs;
 
-    public class PollingManagerConfiguration
+    public class PollingManagerConfiguration : PollingManagerConfigurationBase
 	{
-		private readonly Dictionary<string, PollableBase> _rows = new Dictionary<string, PollableBase>()
+		public PollingManagerConfiguration(SLProtocol protocol) : base(protocol)
 		{
-			// Parent of CEO, CFO, CTO
-			// Child of -
-			{ "Owner", new PollableA(Protocol, "Owner - A") },
+			Rows = new Dictionary<string, PollableBase>()
+			{
+				// Parent of CEO, CFO, CTO
+				// Child of -
+				{ "Owner", new PollableA(Protocol, "Owner - A") },
 
-			// Parent of CFO, CTO, Expert Hub Lead
-			// Child of Owner
-			{ "CEO", new PollableA(Protocol, "CEO - A") },
+				// Parent of CFO, CTO, Expert Hub Lead
+				// Child of Owner
+				{ "CEO", new PollableA(Protocol, "CEO - A") },
 
-			// Parent of -
-			// Child of Owner, CEO
-			{ "CFO", new PollableB(Protocol, "CFO - B", 15) },
+				// Parent of -
+				// Child of Owner, CEO
+				{ "CFO", new PollableB(Protocol, "CFO - B", 15) },
 
-			// Parent of Expert Hub Lead
-			// Child of Owner, CEO
-			{ "CTO", new PollableB(Protocol, "CTO - B", 20) },
+				// Parent of Expert Hub Lead
+				// Child of Owner, CEO
+				{ "CTO", new PollableB(Protocol, "CTO - B", 20) },
 
-			// Parent of Principal 1, Principal 2, Senior 1
-			// Child of CEO, CTO
-			{ "Expert Hub Lead", new PollableB(Protocol, "Expert Hub Lead - B") },
+				// Parent of Principal 1, Principal 2, Senior 1
+				// Child of CEO, CTO
+				{ "Expert Hub Lead", new PollableB(Protocol, "Expert Hub Lead - B") },
 
-			// Parent of Senior 2, Senior 3
-			// Child of CTO, Expert Hub Lead
-			{ "Principal 1", new PollableB(Protocol, "Principal 1 - B") },
+				// Parent of Senior 2, Senior 3
+				// Child of CTO, Expert Hub Lead
+				{ "Principal 1", new PollableB(Protocol, "Principal 1 - B") },
 
-			// Parent of Senior 1
-			// Child of CTO, Expert Hub Lead
-			{ "Principal 2", new PollableC(Protocol, "Principal 2 - C", 30, 60, PeriodType.Default) },
+				// Parent of Senior 1
+				// Child of CTO, Expert Hub Lead
+				{ "Principal 2", new PollableC(Protocol, "Principal 2 - C", 30, 60, PeriodType.Default) },
 
-			// Parent of -
-			// Child of Expert Hub Lead, Principal 2
-			{ "Senior 1", new PollableA(Protocol, "Senior 1 - A") },
+				// Parent of -
+				// Child of Expert Hub Lead, Principal 2
+				{ "Senior 1", new PollableA(Protocol, "Senior 1 - A") },
 
-			// Parent of -
-			// Child of Principal 1
-			{ "Senior 2", new PollableB(Protocol, "Senior 2 - B") },
+				// Parent of -
+				// Child of Principal 1
+				{ "Senior 2", new PollableB(Protocol, "Senior 2 - B") },
 
-			// Parent of -
-			// Child of Principal 1
-			{ "Senior 3", new PollableC(Protocol, "Senior 3 - C") },
-		};
+				// Parent of -
+				// Child of Principal 1
+				{ "Senior 3", new PollableC(Protocol, "Senior 3 - C") },
+			};
 
-		private readonly List<Dependency> _dependencies = new List<Dependency>()
-		{
-			new Dependency(1, true, "Must Be On is not on!"),
-			new Dependency(3, false, "Must Not Be Vacation is on vacation!"),
-			new Dependency("Working", true, "Must Equal Working is not working!"),
-		};
-
-		public PollingManagerConfiguration(SLProtocol protocol)
-		{
-			Protocol = protocol;
-			SetRelations();
-			SetDependencies();
+			Dependencies = new List<Dependency>()
+			{
+				new Dependency(1, true, "Must Be On is not on!"),
+				new Dependency(3, false, "Must Not Be Vacation is on vacation!"),
+				new Dependency("Working", true, "Must Equal Working is not working!"),
+			};
 		}
 
-		public static SLProtocol Protocol { get; set; }
+		protected override Dictionary<string, PollableBase> Rows { get; set; }
 
-		public List<PollableBase> Rows => _rows.Select(row => row.Value).ToList();
+		protected override List<Dependency> Dependencies { get; set; }
 
-		private void SetRelations()
+		protected override void CreateDependencies()
 		{
-			_rows["Owner"].AddChildren(_rows["CEO"], _rows["CFO"], _rows["CTO"]);
-
-			_rows["CEO"].AddChildren(_rows["CFO"], _rows["CTO"], _rows["Expert Hub Lead"]);
-
-			_rows["CTO"].AddChildren(_rows["Expert Hub Lead"]);
-
-			_rows["Principal 1"].AddParents(_rows["CTO"], _rows["Expert Hub Lead"]);
-			_rows["Principal 1"].AddChildren(_rows["Senior 2"], _rows["Senior 3"]);
-
-			_rows["Principal 2"].AddParents(_rows["CTO"], _rows["Expert Hub Lead"]);
-			_rows["Principal 2"].AddChildren(_rows["Senior 1"]);
-
-			_rows["Senior 1"].AddParents(_rows["Expert Hub Lead"]);
+			Rows["Owner"].AddDependency(10, Dependencies[0]);
+			Rows["Owner"].AddDependency(20, Dependencies[1]);
+			Rows["Owner"].AddDependency(30, Dependencies[2]);
 		}
 
-		private void SetDependencies()
+		protected override void CreateRelations()
 		{
-			_rows["Owner"].AddDependency(10, _dependencies[0]);
-			_rows["Owner"].AddDependency(20, _dependencies[1]);
-			_rows["Owner"].AddDependency(30, _dependencies[2]);
+			Rows["Owner"].AddChildren(Rows["CEO"], Rows["CFO"], Rows["CTO"]);
+
+			Rows["CEO"].AddChildren(Rows["CFO"], Rows["CTO"], Rows["Expert Hub Lead"]);
+
+			Rows["CTO"].AddChildren(Rows["Expert Hub Lead"]);
+
+			Rows["Principal 1"].AddParents(Rows["CTO"], Rows["Expert Hub Lead"]);
+			Rows["Principal 1"].AddChildren(Rows["Senior 2"], Rows["Senior 3"]);
+
+			Rows["Principal 2"].AddParents(Rows["CTO"], Rows["Expert Hub Lead"]);
+			Rows["Principal 2"].AddChildren(Rows["Senior 1"]);
+
+			Rows["Senior 1"].AddParents(Rows["Expert Hub Lead"]);
 		}
 	}
 }

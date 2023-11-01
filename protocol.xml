@@ -19,6 +19,35 @@
 	</Compliancies>
 
 	<Params>
+		<Param id="1" trending="false">
+			<Name>Clear</Name>
+			<Description>Clear</Description>
+			<Type>write</Type>
+			<Interprete>
+				<RawType>numeric text</RawType>
+				<Type>double</Type>
+				<LengthType>next param</LengthType>
+			</Interprete>
+			<Display>
+				<RTDisplay>true</RTDisplay>
+				<Positions>
+					<Position>
+						<Page>General</Page>
+						<Column>0</Column>
+						<Row>0</Row>
+					</Position>
+				</Positions>
+			</Display>
+			<Measurement>
+				<Type>button</Type>
+				<Discreets>
+					<Discreet>
+						<Display>Clear</Display>
+						<Value>0</Value>
+					</Discreet>
+				</Discreets>
+			</Measurement>
+		</Param>
 		<Param id="10" trending="false">
 			<Name>MustBeOn</Name>
 			<Description>Must Be On</Description>
@@ -35,7 +64,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>1</Row>
+						<Row>2</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -68,7 +97,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>1</Row>
+						<Row>2</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -102,7 +131,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>2</Row>
+						<Row>3</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -139,7 +168,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>2</Row>
+						<Row>3</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -177,7 +206,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>3</Row>
+						<Row>4</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -200,7 +229,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>3</Row>
+						<Row>4</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -245,7 +274,7 @@
 					<Position>
 						<Page>General</Page>
 						<Column>0</Column>
-						<Row>0</Row>
+						<Row>1</Row>
 					</Position>
 				</Positions>
 			</Display>
@@ -622,6 +651,7 @@
 		<QAction id="2" name="Polling Manager" encoding="csharp" triggers="998;999" entryPoint="PollingManagerInit;PollingManagerCheck"/>
 		<QAction id="3" name="Polling Manager Update" encoding="csharp" row="true" triggers="1053;1055;1059" />
 		<QAction id="4" name="Polling Manager Context Menu" encoding="csharp" triggers="1100" />
+		<QAction id="5" name="Clear Table" encoding="csharp" triggers="1" />
 	</QActions>
 
 	<Groups>
