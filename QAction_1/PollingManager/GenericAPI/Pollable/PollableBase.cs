@@ -14,13 +14,13 @@
 		/// Initializes a new instance of the <see cref="PollableBase"/> class.
 		/// </summary>
 		/// <param name="protocol">Link with SLProtocol process.</param>
-		/// <param name="name">Name of the PollingManager table row.</param>
-		public PollableBase(SLProtocol protocol, string name)
+		/// <param name="dataSet">Description of the configurable data set.</param>
+		public PollableBase(SLProtocol protocol, string dataSet)
 		{
 			Protocol = protocol;
-			Name = name;
-			Period = 5;
-			DefaultPeriod = 10;
+			DataSet = dataSet;
+			Interval = 5;
+			DefaultInterval = 10;
 			PeriodType = PeriodType.Default;
 			LastPoll = default;
 			Status = Status.NotPolled;
@@ -30,11 +30,11 @@
 
 		public SLProtocol Protocol { get; set; }
 
-		public string Name { get; set; }
+		public string DataSet { get; set; }
 
-		public double Period { get; set; }
+		public double Interval { get; set; }
 
-		public double DefaultPeriod { get; set; }
+		public double DefaultInterval { get; set; }
 
 		public PeriodType PeriodType { get; set; }
 
@@ -71,9 +71,9 @@
 				throw new ArgumentException($"Parameter '{nameof(row)}' must have at least 9 elements, but has '{row.Length}'.");
 			}
 
-			Name = Convert.ToString(row[(int)Column.Name]) ?? string.Empty;
-			Period = Convert.ToDouble(row[(int)Column.Period]);
-			DefaultPeriod = Convert.ToDouble(row[(int)Column.DefaultPeriod]);
+			DataSet = Convert.ToString(row[(int)Column.Name]) ?? string.Empty;
+			Interval = Convert.ToDouble(row[(int)Column.Period]);
+			DefaultInterval = Convert.ToDouble(row[(int)Column.DefaultPeriod]);
 			PeriodType = (PeriodType)Convert.ToDouble(row[(int)Column.PeriodType]);
 			LastPoll = DateTime.FromOADate(Convert.ToDouble(row[(int)Column.LastPoll]));
 			Status = (Status)Convert.ToDouble(row[(int)Column.Status]);
@@ -138,7 +138,7 @@
 			{
 				Protocol.Log($"QA{Protocol.QActionID}|{Protocol.GetTriggerParameter()}|PollableBase.CheckDependencies|Exception thrown:{Environment.NewLine}{ex}", LogType.Error, LogLevel.NoLogging);
 
-				Reason = "Something went wrong. Please check logs.";
+				Reason = "Something went wrong. Please check the logs for more information.";
 				return false;
 			}
 
@@ -165,7 +165,7 @@
 		{
 			if (Children.Contains(parent))
 			{
-				throw new InvalidOperationException($"Circular dependency, '{parent.Name}' is already a child of '{Name}'.");
+				throw new InvalidOperationException($"Circular dependency, '{parent.DataSet}' is already a child of '{DataSet}'.");
 			}
 
 			if (Parents.Contains(parent))
@@ -187,7 +187,7 @@
 			{
 				if (Children.Contains(parent))
 				{
-					throw new InvalidOperationException($"Circular dependency, '{parent.Name}' is already a child of '{Name}'.");
+					throw new InvalidOperationException($"Circular dependency, '{parent.DataSet}' is already a child of '{DataSet}'.");
 				}
 
 				if (Parents.Contains(parent))
@@ -209,7 +209,7 @@
 		{
 			if (Parents.Contains(child))
 			{
-				throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
+				throw new InvalidOperationException($"Circular dependency, '{child.DataSet}' is already a parent of '{DataSet}'.");
 			}
 
 			if (Children.Contains(child))
@@ -231,7 +231,7 @@
 			{
 				if (Parents.Contains(child))
 				{
-					throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
+					throw new InvalidOperationException($"Circular dependency, '{child.DataSet}' is already a parent of '{DataSet}'.");
 				}
 
 				if (Children.Contains(child))

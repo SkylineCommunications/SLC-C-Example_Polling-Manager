@@ -12,11 +12,11 @@
 	{
         SLProtocol Protocol { get; set; }
 
-        string Name { get; set; }
+        string DataSet { get; set; }
 
-        double Period { get; set; }
+        double Interval { get; set; }
 
-        double DefaultPeriod { get; set; }
+        double DefaultInterval { get; set; }
 
         PeriodType PeriodType { get; set; }
 

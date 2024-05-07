@@ -82,7 +82,7 @@
 
 				if (table.RowCount == 0)
 				{
-					throw new InvalidOperationException($"Polling manager for element [{key}] is not initialized, please call AddManager first.");
+					throw new InvalidOperationException($"Polling manager for element '{key}' is not initialized, please call AddManager first.");
 				}
 
 				protocol.CheckTrigger(initTrigger);
@@ -129,9 +129,9 @@
 
 			for (int i = 0; i < rows.Count; i++)
 			{
-				if (!names.Add(rows[i].Name))
+				if (!names.Add(rows[i].DataSet))
 				{
-					throw new ArgumentException($"Duplicate name: {rows[i].Name}.");
+					throw new ArgumentException($"Duplicate name '{rows[i].DataSet}'.");
 				}
 
 				_rows.Add((i + 1).ToString(), rows[i] ?? throw new ArgumentException("Rows parameter can't contain null values."));
@@ -171,11 +171,11 @@
 				switch (currentRow.PeriodType)
 				{
 					case PeriodType.Default:
-						readyToPoll = CheckLastPollTime(currentRow.DefaultPeriod, currentRow.LastPoll);
+						readyToPoll = CheckLastPollTime(currentRow.DefaultInterval, currentRow.LastPoll);
 						break;
 
 					case PeriodType.Custom:
-						readyToPoll = CheckLastPollTime(currentRow.Period, currentRow.LastPoll);
+						readyToPoll = CheckLastPollTime(currentRow.Interval, currentRow.LastPoll);
 						break;
 
 					default:
@@ -220,10 +220,10 @@
 					break;
 
 				case Column.PeriodType:
-					double period = _rows[rowId].Period;
+					double period = _rows[rowId].Interval;
 					tableRow = LoadRow(rowId);
 					if (tableRow.PeriodType == PeriodType.Custom)
-						tableRow.Period = period;
+						tableRow.Interval = period;
 					break;
 
 				case Column.Poll:
@@ -430,9 +430,9 @@
 		/// <param name="row">Row for which to show parents.</param>
 		private void ShowParents(IPollable row)
 		{
-			string parents = String.Join(Environment.NewLine, row.Parents.Where(parent => parent.State == State.Disabled).Select(parent => parent.Name));
+			string parents = String.Join(Environment.NewLine, row.Parents.Where(parent => parent.State == State.Disabled).Select(parent => parent.DataSet));
 
-			string message = $"Unable to enable '{row.Name}' because it depends on the following rows:{Environment.NewLine}" +
+			string message = $"Unable to enable '{row.DataSet}' because it depends on the following rows:{Environment.NewLine}" +
 				$"{parents}{Environment.NewLine}" +
 				$"Please enable them first or use [Force Enable].";
 
@@ -445,9 +445,9 @@
 		/// <param name="row">Row for which to show children.</param>
 		private void ShowChildren(IPollable row)
 		{
-			string children = String.Join(Environment.NewLine, row.Children.Where(child => child.State == State.Enabled).Select(child => child.Name));
+			string children = String.Join(Environment.NewLine, row.Children.Where(child => child.State == State.Enabled).Select(child => child.DataSet));
 
-			string message = $"Unable to disable '{row.Name}' because the following rows are dependent on it:{Environment.NewLine}" +
+			string message = $"Unable to disable '{row.DataSet}' because the following rows are dependent on it:{Environment.NewLine}" +
 				$"{children}{Environment.NewLine}" +
 				$"Please disable them first or use [Force Disable].";
 
@@ -551,14 +551,12 @@
 			return new PollingmanagerQActionRow
 			{
 				Pollingmanager_id = key,
-				Pollingmanager_name = value.Name,
-				Pollingmanager_period = value.PeriodType == PeriodType.Custom ? value.Period : value.DefaultPeriod,
-				Pollingmanager_defaultperiod = value.DefaultPeriod,
-				Pollingmanager_periodtype = value.PeriodType,
+				Pollingmanager_dataset = value.DataSet,
+				Pollingmanager_interval = value.PeriodType == PeriodType.Custom ? value.Interval : value.DefaultInterval,
+				Pollingmanager_defaultinterval = value.DefaultInterval,
 				Pollingmanager_lastpoll = value.LastPoll == default ? Convert.ToDouble(Status.NotPolled) : value.LastPoll.ToOADate(),
 				Pollingmanager_status = value.State == State.Disabled ? Status.Disabled : value.Status,
 				Pollingmanager_reason = value.Reason,
-				Pollingmanager_state = value.State,
 			};
 		}
 
