@@ -83,7 +83,9 @@ Any inquiries can be addressed to:
 				<LengthType>next param</LengthType>
 				<DefaultValue>
 					<![CDATA[
-TODO
+This Skyline Example demonstrates how to implement configurable polling within connectors that need it.
+Note it's not the intention to make all connectors fully configurable like this.
+This should only be used when applicable and on applicable data sets.
 					]]>
 				</DefaultValue>
 			</Interprete>
