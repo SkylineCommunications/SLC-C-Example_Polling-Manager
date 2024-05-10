@@ -198,7 +198,7 @@
 		/// <param name="column">Column on which set was performed.</param>
 		/// <exception cref="ArgumentException">Throws if <paramref name="rowKey"/> doesn't exist in the table.</exception>
 		/// <exception cref="ArgumentException">
-		/// Throws if <paramref name="column"/> is not <see cref="Column.Interval"/>, <see cref="Column.IntervalType"/> or <see cref="Column.Poll"/>.
+		/// Throws if <paramref name="column"/> is not <see cref="Column.Interval"/>, <see cref="Column.AdminStatus"/> or <see cref="Column.Poll"/>.
 		/// </exception>
 		public void HandleRowUpdate(string rowKey, Column column)
 		{
@@ -216,7 +216,7 @@
 					tableRow.IntervalType = IntervalType.Custom;
 					break;
 
-				case Column.IntervalType:
+				case Column.AdminStatus:
 					double interval = rows[rowKey].Interval;
 					tableRow = LoadRow(rowKey);
 					if (tableRow.IntervalType == IntervalType.Custom)
@@ -553,12 +553,11 @@
 				Pollingmanager_id = rowKey,
 				Pollingmanager_name = value.Name,
 				Pollingmanager_interval = value.IntervalType == IntervalType.Custom ? value.Interval : value.DefaultInterval,
-				Pollingmanager_defaultinterval = value.DefaultInterval,
-				Pollingmanager_intervaltype = value.IntervalType,
-				Pollingmanager_lastpoll = value.LastPoll == default ? Convert.ToDouble(Status.NotPolled) : value.LastPoll.ToOADate(),
-				Pollingmanager_status = value.State == State.Disabled ? Status.Disabled : value.Status,
-				Pollingmanager_reason = value.Reason,
-				Pollingmanager_state = value.State,
+				Pollingmanager_suggestedinterval = value.DefaultInterval,
+				Pollingmanager_adminstatus = value.IntervalType,
+				Pollingmanager_lastpolltime = value.LastPoll == default ? Convert.ToDouble(Status.NotPolled) : value.LastPoll.ToOADate(),
+				Pollingmanager_lastpollstatus = value.State == State.Disabled ? Status.Disabled : value.Status,
+				Pollingmanager_lastpollstatusinfo = value.Reason,
 			};
 		}
 

@@ -33,7 +33,7 @@
                     return Column.Interval;
 
                 case Trigger.IntervalType:
-                    return Column.IntervalType;
+                    return Column.AdminStatus;
 
                 case Trigger.Poll:
                     return Column.Poll;

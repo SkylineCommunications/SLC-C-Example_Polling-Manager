@@ -74,7 +74,7 @@
 			Name = Convert.ToString(row[(int)Column.Name]) ?? string.Empty;
 			Interval = Convert.ToDouble(row[(int)Column.Interval]);
 			DefaultInterval = Convert.ToDouble(row[(int)Column.DefaultInterval]);
-			IntervalType = (IntervalType)Convert.ToDouble(row[(int)Column.IntervalType]);
+			IntervalType = (IntervalType)Convert.ToDouble(row[(int)Column.AdminStatus]);
 			LastPoll = DateTime.FromOADate(Convert.ToDouble(row[(int)Column.LastPoll]));
 			Status = (Status)Convert.ToDouble(row[(int)Column.Status]);
 			Reason = Convert.ToString(row[(int)Column.Reason]) ?? string.Empty;

@@ -11,7 +11,7 @@
         Name = 1,
         Interval = 2,
         DefaultInterval = 3,
-        IntervalType = 4,
+        AdminStatus = 4,
         LastPoll = 5,
         Status = 6,
         Reason = 7,
