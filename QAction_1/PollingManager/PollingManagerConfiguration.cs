@@ -51,19 +51,9 @@
 				// Child of Principal 1
 				{ "Senior 3", new Pollable(Protocol, "Senior 3 - C") },
 			};
-
-			Dependencies = new List<Dependency>()
-			{
-			};
 		}
 
 		protected override Dictionary<string, PollableBase> Rows { get; set; }
-
-		protected override List<Dependency> Dependencies { get; set; }
-
-		protected override void CreateDependencies()
-		{
-		}
 
 		protected override void CreateRelations()
 		{
