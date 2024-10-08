@@ -9,10 +9,9 @@
 		{
 		}
 
-		public override bool Poll()
+		public override bool InitiatePoll()
 		{
 			Protocol.Log($"Polling '{Name}'.");
-
 			return true;
 		}
 	}

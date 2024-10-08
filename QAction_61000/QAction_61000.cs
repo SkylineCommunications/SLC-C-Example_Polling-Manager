@@ -1,10 +1,9 @@
 using System;
-
 using Skyline.DataMiner.PollingManager;
 using Skyline.DataMiner.Scripting;
 
 /// <summary>
-/// DataMiner QAction Class: Polling Manager - Sets.
+/// DataMiner QAction Class.
 /// </summary>
 public static class QAction
 {
@@ -17,19 +16,18 @@ public static class QAction
 		try
 		{
 			// Get trigger row key.
-			Trigger trigger = (Trigger)protocol.GetTriggerParameter();
-			object value = protocol.GetParameter((int)trigger);
-			string rowId = protocol.RowKey();
+			int trigger = protocol.GetTriggerParameter();
 
 			// Updates row with specific key that was triggered by specific column.
-			PollingManagerContainer
-				.GetManager(protocol, initTrigger: 1)
-				.HandleRowUpdate(rowId, trigger.ToColumn(),value);
+			//var responseHandler = PollingManagerContainer.GetManager(protocol, initTrigger: 1).GetResponseHandler(trigger);
+			//responseHandler.ProcessResponse(protocol);
+
+			PollingManagerContainer.GetManager(protocol, initTrigger: 1).ProcessResponse(trigger);
 		}
 		catch (Exception ex)
 		{
 			protocol.Log(
-				$"QA{protocol.QActionID}|{protocol.GetTriggerParameter()}|Polling Manager - Sets|Exception thrown:{Environment.NewLine}{ex}",
+				$"QA{protocol.QActionID}|{protocol.GetTriggerParameter()}|Polling Manager - Responses|Exception thrown:{Environment.NewLine}{ex}",
 				LogType.Error,
 				LogLevel.NoLogging);
 		}

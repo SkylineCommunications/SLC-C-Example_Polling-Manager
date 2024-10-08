@@ -19,32 +19,31 @@
 		{
 			Protocol = protocol;
 			Name = name;
-			Interval = 5;
+			Interval = double.NaN;
 			DefaultInterval = 10;
-			IntervalType = IntervalType.Default;
 			LastPoll = default;
-			Status = Status.NotPolled;
-			Reason = string.Empty;
-			State = State.Enabled;
+			PollStatus = PollStatus.NotPolled;
+			PollInfo = string.Empty;
+			AdminStatus = AdminState.Enabled;
 		}
 
 		public SLProtocol Protocol { get; set; }
 
 		public string Name { get; set; }
 
+		public int ID { get; set; }
+
 		public double Interval { get; set; }
 
 		public double DefaultInterval { get; set; }
 
-		public IntervalType IntervalType { get; set; }
-
 		public DateTime LastPoll { get; set; }
 
-		public Status Status { get; set; }
+		public PollStatus PollStatus { get; set; }
 
-		public string Reason { get; set; }
+		public string PollInfo { get; set; }
 
-		public State State { get; set; }
+		public AdminState AdminStatus { get; set; }
 
 		public List<IPollable> Parents { get; set; } = new List<IPollable>();
 
@@ -52,12 +51,14 @@
 
 		public Dictionary<int, Dependency> Dependencies { get; set; } = new Dictionary<int, Dependency>();
 
+		public string Description { get; set; }
+
 		/// <summary>
 		/// Method to be implemented by extending class. This method gets called by <see cref="PollingManager"/>.
 		/// </summary>
 		/// <returns>Returns true for success and false for failed poll.</returns>
-		/// <remarks>Implementation of <see cref="Poll"/> should never throw.</remarks>
-		public abstract bool Poll();
+		/// <remarks>Implementation of <see cref="InitiatePoll"/> should never throw.</remarks>
+		public abstract bool InitiatePoll();
 
 		/// <summary>
 		/// Updates current state of <see cref="PollableBase"/>.
@@ -66,23 +67,23 @@
 		/// <exception cref="ArgumentException">Throws if <paramref name="row"/> has length less then 9.</exception>
 		public void Update(object[] row)
 		{
-			if (row.Length < 9)
+			if (row.Length < 10)
 			{
 				throw new ArgumentException($"Parameter '{nameof(row)}' must have at least 9 elements, but has '{row.Length}'.");
 			}
 
+			ID = Convert.ToInt32(row[(int)Column.ID]);
 			Name = Convert.ToString(row[(int)Column.Name]) ?? string.Empty;
 			Interval = Convert.ToDouble(row[(int)Column.Interval]);
 			DefaultInterval = Convert.ToDouble(row[(int)Column.DefaultInterval]);
-			IntervalType = (IntervalType)Convert.ToDouble(row[(int)Column.AdminStatus]);
 			LastPoll = DateTime.FromOADate(Convert.ToDouble(row[(int)Column.LastPoll]));
-			Status = (Status)Convert.ToDouble(row[(int)Column.Status]);
-			Reason = Convert.ToString(row[(int)Column.Reason]) ?? string.Empty;
-			State = (State)Convert.ToDouble(row[(int)Column.State]);
+			PollStatus = (PollStatus)Convert.ToDouble(row[(int)Column.PollStatus]);
+			PollInfo = Convert.ToString(row[(int)Column.PollInfo]) ?? string.Empty;
+			AdminStatus = (AdminState)Convert.ToDouble(row[(int)Column.AdminStatus]);
 		}
 
 		/// <summary>
-		/// Gets dependent parameters and compares their values with dependencies. Sets <see cref="Reason"/> to first condition not satisfied.
+		/// Gets dependent parameters and compares their values with dependencies. Sets <see cref="PollInfo"/> to first condition not satisfied.
 		/// </summary>
 		/// <returns>False if any condition is not satisfied, otherwise true.</returns>
 		public bool CheckDependencies()
@@ -100,7 +101,7 @@
 						{
 							if (!CheckDoubleParameter(parameter, dependency.Value.Value))
 							{
-								Reason = dependency.Value.Message;
+								PollInfo = dependency.Value.Message;
 								return false;
 							}
 						}
@@ -108,7 +109,7 @@
 						{
 							if (CheckDoubleParameter(parameter, dependency.Value.Value))
 							{
-								Reason = dependency.Value.Message;
+								PollInfo = dependency.Value.Message;
 								return false;
 							}
 						}
@@ -119,7 +120,7 @@
 						{
 							if (!CheckStringParameter(parameter, dependency.Value.Value))
 							{
-								Reason = dependency.Value.Message;
+								PollInfo = dependency.Value.Message;
 								return false;
 							}
 						}
@@ -127,7 +128,7 @@
 						{
 							if (CheckStringParameter(parameter, dependency.Value.Value))
 							{
-								Reason = dependency.Value.Message;
+								PollInfo = dependency.Value.Message;
 								return false;
 							}
 						}
@@ -138,11 +139,11 @@
 			{
 				Protocol.Log($"QA{Protocol.QActionID}|{Protocol.GetTriggerParameter()}|PollableBase.CheckDependencies|Exception thrown:{Environment.NewLine}{ex}", LogType.Error, LogLevel.NoLogging);
 
-				Reason = "Something went wrong. Please check logs.";
+				PollInfo = "Something went wrong. Please check logs.";
 				return false;
 			}
 
-			Reason = string.Empty;
+			PollInfo = string.Empty;
 			return true;
 		}
 

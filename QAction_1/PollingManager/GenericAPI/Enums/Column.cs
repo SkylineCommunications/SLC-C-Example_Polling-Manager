@@ -1,21 +1,22 @@
 ﻿namespace Skyline.DataMiner.PollingManager
 {
-    using Skyline.DataMiner.Scripting;
+	using Skyline.DataMiner.Scripting;
 
 	/// <summary>
 	/// Represents columns of the <see cref="PollingmanagerQActionTable"/>.
 	/// </summary>
-    public enum Column
-    {
-        Id = 0,
-        Name = 1,
-        Interval = 2,
-        DefaultInterval = 3,
-        AdminStatus = 4,
-        LastPoll = 5,
-        Status = 6,
-        Reason = 7,
-        Poll = 8,
-        State = 9,
-    }
+	public enum Column
+	{
+		Name = 0,
+		ID= 1,
+		Description = 2,
+		Interval = 3,
+		DefaultInterval = 4,
+		AdminStatus = 5,
+		Poll = 6,
+		LastPoll = 7,
+		PollStatus = 8,
+		PollInfo = 9,
+		FullDescription = 10,
+	}
 }

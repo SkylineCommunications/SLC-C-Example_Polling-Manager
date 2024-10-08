@@ -1,9 +1,12 @@
 ﻿namespace Skyline.Protocol.PollingManager
 {
+	using System;
 	using System.Collections.Generic;
-
 	using Skyline.DataMiner.PollingManager;
 	using Skyline.DataMiner.Scripting;
+	using Skyline.Protocol.PollingManager.CustomCode.ResponseHandlers;
+	using Skyline.Protocol.PollingManager.GenericAPI;
+	using Skyline.Protocol.PollingManager.GenericAPI.PollEntrys;
 
 	public class PollingManagerConfiguration : PollingManagerConfigurationBase
 	{
@@ -11,6 +14,9 @@
 		{
 			Rows = new Dictionary<string, PollableBase>()
 			{
+				{ "Basic/normal dataset", new BasicPoll(Protocol, "Basic dataset12", 60_001) },
+				{ "Basic/normal Failing dataset", new BasicPoll(Protocol, "Failing dataset", 60_002) },
+
 				// Parent of CEO, CFO, CTO
 				// Child of -
 				{ "Owner", new Pollable(Protocol, "Owner - A") },
@@ -50,16 +56,61 @@
 				// Parent of -
 				// Child of Principal 1
 				{ "Senior 3", new Pollable(Protocol, "Senior 3 - C") },
+
+				// Parent of VLANs, Counters, Alarms
+				// Child of -
+				{ "Interfaces", new Pollable(Protocol, "Interfaces") },
+
+				// Parent of Port Overview, Static
+				// Child of Interfaces
+				{ "VLANs", new Pollable(Protocol, "VLANs - Interfaces") },
+
+				// Parent of -
+				// Child of VLANs
+				{ "Port Overview", new Pollable(Protocol, "Port Overview - VLANs") },
+
+				// Parent of -
+				// Child of VLANs
+				{ "Static", new Pollable(Protocol, "Static - VLANs") },
+
+				// Parent of -
+				// Child of Interfaces
+				{ "Counters", new Pollable(Protocol, "Counters - Interfaces") },
+
+				// Parent of CPU, Processes, Alarms
+				// Child of -
+				{ "System", new Pollable(Protocol, "System") },
+
+				// Parent of -
+				// Child of System
+				{ "CPU", new Pollable(Protocol, "CPU - System") },
+
+				// Parent of -
+				// Child of System
+				{ "Processes", new Pollable(Protocol, "Processes - System") },
+
+				// Parent of -
+				// Child of System, Interfaces
+				{ "Alarms", new Pollable(Protocol, "Alarms - System - Interfaces") },
 			};
+
+			Rows["Alarms"].DefaultInterval = 55;
+			Rows["Basic/normal dataset"].DefaultInterval = 16;
+			Rows["Basic/normal dataset"].Interval = 11;
 
 			Dependencies = new List<Dependency>()
 			{
 			};
+
+			ResponseHandlers = new Dictionary<int, ResponseHandler>()
+			{ };
 		}
 
-		protected override Dictionary<string, PollableBase> Rows { get; set; }
+		public override Dictionary<int, ResponseHandler> ResponseHandlers { get; set; }
 
 		protected override List<Dependency> Dependencies { get; set; }
+
+		protected override Dictionary<string, PollableBase> Rows { get; set; }
 
 		protected override void CreateDependencies()
 		{
@@ -80,6 +131,26 @@
 			Rows["Principal 2"].AddChildren(Rows["Senior 1"]);
 
 			Rows["Senior 1"].AddParents(Rows["Expert Hub Lead"]);
+
+			Rows["Interfaces"].AddChildren(Rows["VLANs"], Rows["Counters"], Rows["Alarms"]);
+			Rows["VLANs"].AddChildren(Rows["Port Overview"], Rows["Static"]);
+			Rows["System"].AddChildren(Rows["CPU"], Rows["Processes"], Rows["Alarms"]);
+		}
+
+		protected override void CreateResponseHandlers()
+		{
+			ResponseHandlers.Add(61001, CreateResponse<ResponseBasicDataSet>("Basic/normal dataset"));
+			ResponseHandlers.Add(61002, CreateResponse<ResponseBasicFailDataSet>("Basic/normal Failing dataset"));
+		}
+
+		private ResponseHandler CreateResponse<T>(string pollRowName) where T : IPollingManagerResponseHandler, new()
+		{
+			if (Rows.TryGetValue(pollRowName, out PollableBase row))
+			{
+				return new ResponseHandler(new T(), row.Name);
+			}
+
+			throw new ArgumentException($"CreateResponse|{pollRowName} is not implemented in the polling table.");
 		}
 	}
 }

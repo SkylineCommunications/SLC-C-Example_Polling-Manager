@@ -5,10 +5,10 @@
 	/// <summary>
 	/// Represents states of the <see cref="PollingmanagerQActionTable"/>.
 	/// </summary>
-	public enum State
+	public enum AdminState
     {
-        Disabled = 1,
-        Enabled = 2,
+        Disabled = 0,
+        Enabled = 1,
         ForceDisabled = 3,
         ForceEnabled = 4,
     }

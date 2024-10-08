@@ -5,7 +5,7 @@
 	/// <summary>
 	/// Represents statuses of the <see cref="PollingmanagerQActionTable"/>.
 	/// </summary>
-	public enum Status
+	public enum PollStatus
     {
         NotPolled = -2,
         Disabled = -1,

@@ -1,18 +1,20 @@
 ﻿namespace Skyline.DataMiner.PollingManager
 {
-    using Skyline.DataMiner.Scripting;
+	using Skyline.DataMiner.Scripting;
 
 	/// <summary>
 	/// Represents context menu options of the <see cref="PollingmanagerQActionTable"/>.
 	/// </summary>
-    public enum ContextMenuOption
-    {
-        PollAll = 1,
-        Disable = 2,
-        Enable = 3,
-        ForceDisable = 4,
-        ForceEnable = 5,
-        DisableAll = 6,
-        EnableAll = 7,
-    }
+	public enum ContextMenuOption
+	{
+		Enable = 1,
+		ForceEnable = 2,
+		Disable = 3,
+		ForceDisable = 4,
+		Poll = 5,
+		EnableAll = 11,
+		DisableAll = 12,
+		PollAll = 13,
+		SuggestedInterval = 21,
+	}
 }

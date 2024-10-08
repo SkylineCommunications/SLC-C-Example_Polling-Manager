@@ -10,42 +10,44 @@
 	/// </summary>
 	public interface IPollable
 	{
-        SLProtocol Protocol { get; set; }
+		SLProtocol Protocol { get; set; }
 
-        string Name { get; set; }
+		int ID { get; set; }
 
-        double Interval { get; set; }
+		string Name { get; set; }
 
-        double DefaultInterval { get; set; }
+		string Description { get; set; }
 
-        IntervalType IntervalType { get; set; }
+		double Interval { get; set; }
 
-        DateTime LastPoll { get; set; }
+		double DefaultInterval { get; set; }
 
-        Status Status { get; set; }
+		DateTime LastPoll { get; set; }
 
-        string Reason { get; set; }
+		PollStatus PollStatus { get; set; }
 
-        State State { get; set; }
+		string PollInfo { get; set; }
 
-        List<IPollable> Parents { get; set; }
+		AdminState AdminStatus { get; set; }
 
-        List<IPollable> Children { get; set; }
+		List<IPollable> Parents { get; set; }
 
-        Dictionary<int, Dependency> Dependencies { get; set; }
+		List<IPollable> Children { get; set; }
 
-        bool Poll();
+		Dictionary<int, Dependency> Dependencies { get; set; }
 
-        bool CheckDependencies();
+		bool InitiatePoll();
 
-        void AddDependency(int paramId, Dependency dependency);
+		bool CheckDependencies();
 
-        void AddParent(IPollable parent);
+		void AddDependency(int paramId, Dependency dependency);
 
-        void AddParents(params IPollable[] parents);
+		void AddParent(IPollable parent);
 
-        void AddChild(IPollable child);
+		void AddParents(params IPollable[] parents);
 
-        void AddChildren(params IPollable[] children);
-    }
+		void AddChild(IPollable child);
+
+		void AddChildren(params IPollable[] children);
+	}
 }
