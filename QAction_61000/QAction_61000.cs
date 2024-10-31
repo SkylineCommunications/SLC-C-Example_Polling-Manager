@@ -19,9 +19,6 @@ public static class QAction
 			int trigger = protocol.GetTriggerParameter();
 
 			// Updates row with specific key that was triggered by specific column.
-			//var responseHandler = PollingManagerContainer.GetManager(protocol, initTrigger: 1).GetResponseHandler(trigger);
-			//responseHandler.ProcessResponse(protocol);
-
 			PollingManagerContainer.GetManager(protocol, initTrigger: 1).ProcessResponse(trigger);
 		}
 		catch (Exception ex)

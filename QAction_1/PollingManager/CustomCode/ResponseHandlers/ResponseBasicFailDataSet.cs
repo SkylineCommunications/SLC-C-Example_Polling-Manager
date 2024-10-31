@@ -2,15 +2,15 @@
 {
 	using Skyline.DataMiner.Scripting;
 
-	public class ResponseBasicFailDataSet : IPollingManagerResponseHandler
+	public class ResponseBasicFailDataSet : ResponseHandler
 	{
-		public ResponseBasicFailDataSet()
+		public ResponseBasicFailDataSet(string rowName) : base(rowName)
 		{
 		}
 
-		bool IPollingManagerResponseHandler.ProcessResponse(SLProtocol protocol)
+		public override void ProcessResponse(SLProtocol protocol)
 		{
-			return false;
+			throw new PollingException("Incorrect requirements.");
 		}
 	}
 }

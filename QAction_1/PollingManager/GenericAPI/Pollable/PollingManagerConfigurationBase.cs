@@ -1,12 +1,12 @@
 ﻿namespace Skyline.DataMiner.PollingManager
 {
-	using System.Collections.Generic;
-	using System.Linq;
+    using System.Collections.Generic;
+    using System.Linq;
 
-	using Skyline.DataMiner.Scripting;
-	using Skyline.Protocol.PollingManager.GenericAPI;
+    using Skyline.DataMiner.Scripting;
+    using Skyline.Protocol.PollingManager.CustomCode.ResponseHandlers;
 
-	public abstract class PollingManagerConfigurationBase
+    public abstract class PollingManagerConfigurationBase
 	{
 		public PollingManagerConfigurationBase(SLProtocol protocol) => Protocol = protocol;
 

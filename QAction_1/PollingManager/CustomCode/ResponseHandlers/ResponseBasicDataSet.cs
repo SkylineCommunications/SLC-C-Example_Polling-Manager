@@ -1,16 +1,17 @@
 ﻿namespace Skyline.Protocol.PollingManager.CustomCode.ResponseHandlers
 {
+	using System;
 	using Skyline.DataMiner.Scripting;
 
-	public class ResponseBasicDataSet : IPollingManagerResponseHandler
+	public class ResponseBasicDataSet : ResponseHandler
 	{
-		public ResponseBasicDataSet()
+		public ResponseBasicDataSet(string rowName) : base(rowName)
 		{
 		}
 
-		bool IPollingManagerResponseHandler.ProcessResponse(SLProtocol protocol)
+		public override void ProcessResponse(SLProtocol protocol)
 		{
-			return true;
+			return;
 		}
 	}
 }

@@ -5,7 +5,6 @@
 	using Skyline.DataMiner.PollingManager;
 	using Skyline.DataMiner.Scripting;
 	using Skyline.Protocol.PollingManager.CustomCode.ResponseHandlers;
-	using Skyline.Protocol.PollingManager.GenericAPI;
 	using Skyline.Protocol.PollingManager.GenericAPI.PollEntrys;
 
 	public class PollingManagerConfiguration : PollingManagerConfigurationBase
@@ -14,8 +13,8 @@
 		{
 			Rows = new Dictionary<string, PollableBase>()
 			{
-				{ "Basic/normal dataset", new BasicPoll(Protocol, "Basic dataset12", 60_001) },
-				{ "Basic/normal Failing dataset", new BasicPoll(Protocol, "Failing dataset", 60_002) },
+				{ "Basic", new BasicPoll(Protocol, "Basic Dataset", 60_001) },
+				{ "Fail", new BasicPoll(Protocol, "Failing Dataset", 60_002) },
 
 				// Parent of CEO, CFO, CTO
 				// Child of -
@@ -95,8 +94,8 @@
 			};
 
 			Rows["Alarms"].DefaultInterval = 55;
-			Rows["Basic/normal dataset"].DefaultInterval = 16;
-			Rows["Basic/normal dataset"].Interval = 11;
+			Rows["Basic"].DefaultInterval = 16;
+			Rows["Basic"].Interval = 11;
 
 			Dependencies = new List<Dependency>()
 			{
@@ -139,18 +138,8 @@
 
 		protected override void CreateResponseHandlers()
 		{
-			ResponseHandlers.Add(61001, CreateResponse<ResponseBasicDataSet>("Basic/normal dataset"));
-			ResponseHandlers.Add(61002, CreateResponse<ResponseBasicFailDataSet>("Basic/normal Failing dataset"));
-		}
-
-		private ResponseHandler CreateResponse<T>(string pollRowName) where T : IPollingManagerResponseHandler, new()
-		{
-			if (Rows.TryGetValue(pollRowName, out PollableBase row))
-			{
-				return new ResponseHandler(new T(), row.Name);
-			}
-
-			throw new ArgumentException($"CreateResponse|{pollRowName} is not implemented in the polling table.");
+			ResponseHandlers.Add(61001, new ResponseBasicDataSet(Rows["Basic"].Name));
+			ResponseHandlers.Add(61002, new ResponseBasicFailDataSet(Rows["Fail"].Name));
 		}
 	}
 }

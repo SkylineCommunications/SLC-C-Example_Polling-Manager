@@ -6,7 +6,7 @@
 	using System.Linq;
 
 	using Skyline.DataMiner.Scripting;
-	using Skyline.Protocol.PollingManager.GenericAPI;
+	using Skyline.Protocol.PollingManager.CustomCode.ResponseHandlers;
 	using SLNetMessages = Skyline.DataMiner.Net.Messages;
 
 	/// <summary>
@@ -204,6 +204,7 @@
 					continue;
 				}
 
+				Protocol.Log($"QA{Protocol.QActionID}|CheckForUpdate|{currentRow.Name}|{currentRow.LastPoll}", LogType.Error, LogLevel.NoLogging);
 				if (CheckLastPollTime(currentRow.Interval, currentRow.LastPoll))
 				{
 					PollRow(currentRow);
@@ -525,6 +526,7 @@
 		/// <returns>True if poll period has elapsed, false otherwise.</returns>
 		private bool CheckLastPollTime(double interval, DateTime lastPoll)
 		{
+			Protocol.Log($"QA{Protocol.QActionID}|CheckLastPollTime|{(DateTime.Now - lastPoll).TotalSeconds > interval}|{interval}|{(DateTime.Now - lastPoll).TotalSeconds}", LogType.Error, LogLevel.NoLogging);
 			return (DateTime.Now - lastPoll).TotalSeconds > interval;
 		}
 
@@ -663,24 +665,38 @@
 			Protocol.FillArray(tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Partial);
 		}
 
-		public ResponseHandler GetResponseHandler(int trigger)
+		void UpdatePollingStatus(IPollable row, PollStatus pollStatus, string lastPollInfo = "-1")
 		{
-			if (!responseHandlers.TryGetValue(trigger, out ResponseHandler responseHandler))
-			{
-				throw new NotImplementedException();
-			}
-
-			return responseHandler;
+			row.PollStatus = pollStatus;
+			row.LastPoll = DateTime.Now;
+			row.PollInfo = lastPollInfo;
 		}
 
 		public void ProcessResponse(int trigger)
 		{
 			if (!responseHandlers.TryGetValue(trigger, out ResponseHandler handler))
 			{
-				throw new NotImplementedException();
+				throw new NotImplementedException($"No response handler implemented for id:{trigger}.");
 			}
 
-			var succes = handler.ProcessResponse(Protocol);
+			try
+			{
+				if (rows[handler.RowName].AdminStatus.Equals(AdminState.Enabled))
+				{
+					handler.ProcessResponse(Protocol);
+					UpdatePollingStatus(rows[handler.RowName], PollStatus.Succeeded);
+				}
+			}
+			catch (PollingException e)
+			{
+				UpdatePollingStatus(rows[handler.RowName], PollStatus.Failed, e.Message);
+			}
+			catch (Exception)
+			{
+				UpdatePollingStatus(rows[handler.RowName], PollStatus.Failed, "Failed to Process Response.");
+			}
+
+			FillTableNoDelete(rows);
 		}
 	}
 }
