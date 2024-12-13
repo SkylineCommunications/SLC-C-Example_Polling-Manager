@@ -1,4 +1,4 @@
-﻿namespace Skyline.DataMiner.PollingManager
+﻿namespace Skyline.Protocol.PollingManager.GenericAPI.Enums
 {
 	using Skyline.DataMiner.Scripting;
 
@@ -11,7 +11,7 @@
 		ID= 1,
 		Description = 2,
 		Interval = 3,
-		DefaultInterval = 4,
+		SuggestedInterval = 4,
 		AdminStatus = 5,
 		Poll = 6,
 		LastPoll = 7,

@@ -2,50 +2,43 @@
 {
 	using System;
 	using System.Collections.Generic;
-
+	using System.Linq;
 	using Skyline.DataMiner.Scripting;
+	using Skyline.Protocol.PollingManager.GenericAPI.Enums;
+	using Skyline.Protocol.PollingManager.GenericAPI.Exceptions;
 
 	/// <summary>
 	/// Base class that implements <see cref="IPollable"/>.
 	/// </summary>
 	public abstract class PollableBase : IPollable
 	{
+		private readonly Dictionary<int, object> _singleParameterIds;
+		private List<int> _tableParameterIds;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PollableBase"/> class.
 		/// </summary>
 		/// <param name="protocol">Link with SLProtocol process.</param>
-		/// <param name="name">Name of the PollingManager table row.</param>
-		public PollableBase(SLProtocol protocol, string name)
+		/// <param name="description">Description of the PollingManager table row.</param>
+		public PollableBase(SLProtocol protocol, string description)
 		{
 			Protocol = protocol;
-			Name = name;
+			Description = description;
 			Interval = double.NaN;
-			DefaultInterval = 10;
+			SuggestedInterval = 10;
 			LastPoll = default;
 			PollStatus = PollStatus.NotPolled;
 			PollInfo = string.Empty;
 			AdminStatus = AdminState.Enabled;
+			ActionId = 0;
+			Mandatory = false;
+			_singleParameterIds = new Dictionary<int, object>();
+			_tableParameterIds = new List<int>();
 		}
 
-		public SLProtocol Protocol { get; set; }
-
-		public string Name { get; set; }
-
-		public int ID { get; set; }
-
-		public double Interval { get; set; }
-
-		public double DefaultInterval { get; set; }
-
-		public DateTime LastPoll { get; set; }
-
-		public PollStatus PollStatus { get; set; }
-
-		public string PollInfo { get; set; }
+		public int ActionId { get; set; }
 
 		public AdminState AdminStatus { get; set; }
-
-		public List<IPollable> Parents { get; set; } = new List<IPollable>();
 
 		public List<IPollable> Children { get; set; } = new List<IPollable>();
 
@@ -53,108 +46,94 @@
 
 		public string Description { get; set; }
 
-		/// <summary>
-		/// Method to be implemented by extending class. This method gets called by <see cref="PollingManager"/>.
-		/// </summary>
-		/// <returns>Returns true for success and false for failed poll.</returns>
-		/// <remarks>Implementation of <see cref="InitiatePoll"/> should never throw.</remarks>
-		public abstract bool InitiatePoll();
+		public int ID { get; set; }
+
+		public double Interval { get; set; }
+
+		public DateTime LastPoll { get; set; }
+
+		public bool Mandatory { get; set; }
+
+		public string Name { get; set; }
+
+		public List<IPollable> Parents { get; set; } = new List<IPollable>();
+
+		public string PollInfo { get; set; }
+
+		public PollStatus PollStatus { get; set; }
+
+		public SLProtocol Protocol { get; set; }
+
+		public double SuggestedInterval { get; set; }
 
 		/// <summary>
-		/// Updates current state of <see cref="PollableBase"/>.
+		/// Adds child without creating two way relation between elements. This shouldn't be used directly. Use <see cref="AddChildren"/> instead.
 		/// </summary>
-		/// <param name="row">Row on which to base the update.</param>
-		/// <exception cref="ArgumentException">Throws if <paramref name="row"/> has length less then 9.</exception>
-		public void Update(object[] row)
+		/// <param name="child">Child element.</param>
+		/// <exception cref="InvalidOperationException">Throws if <paramref name="child"/> is already this elements parent.</exception>
+		void IPollable.AddChild(IPollable child)
 		{
-			if (row.Length < 10)
+			if (Parents.Contains(child))
 			{
-				throw new ArgumentException($"Parameter '{nameof(row)}' must have at least 9 elements, but has '{row.Length}'.");
+				throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
 			}
 
-			ID = Convert.ToInt32(row[(int)Column.ID]);
-			Name = Convert.ToString(row[(int)Column.Name]) ?? string.Empty;
-			Interval = Convert.ToDouble(row[(int)Column.Interval]);
-			DefaultInterval = Convert.ToDouble(row[(int)Column.DefaultInterval]);
-			LastPoll = DateTime.FromOADate(Convert.ToDouble(row[(int)Column.LastPoll]));
-			PollStatus = (PollStatus)Convert.ToDouble(row[(int)Column.PollStatus]);
-			PollInfo = Convert.ToString(row[(int)Column.PollInfo]) ?? string.Empty;
-			AdminStatus = (AdminState)Convert.ToDouble(row[(int)Column.AdminStatus]);
+			if (Children.Contains(child))
+			{
+				return;
+			}
+
+			Children.Add(child);
 		}
 
 		/// <summary>
-		/// Gets dependent parameters and compares their values with dependencies. Sets <see cref="PollInfo"/> to first condition not satisfied.
+		/// Adds children to this element, and adds this element as a parent of each child passed as parameter.
 		/// </summary>
-		/// <returns>False if any condition is not satisfied, otherwise true.</returns>
-		public bool CheckDependencies()
+		/// <param name="children">Child elements.</param>
+		/// <exception cref="InvalidOperationException">Throws if any <paramref name="children"/> element is already this elements parent.</exception>
+		public void AddChildren(params IPollable[] children)
 		{
-			try
+			foreach (IPollable child in children)
 			{
-				foreach (KeyValuePair<int, Dependency> dependency in Dependencies)
+				if (Parents.Contains(child))
 				{
-					object parameter = Protocol.GetParameter(dependency.Key)
-						?? throw new Exception($"Parameter with ID '{dependency.Key}' doesn't exist.");
-
-					if (dependency.Value.Value is double)
-					{
-						if (dependency.Value.ShouldEqual)
-						{
-							if (!CheckDoubleParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								return false;
-							}
-						}
-						else
-						{
-							if (CheckDoubleParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								return false;
-							}
-						}
-					}
-					else if (dependency.Value.Value is string)
-					{
-						if (dependency.Value.ShouldEqual)
-						{
-							if (!CheckStringParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								return false;
-							}
-						}
-						else
-						{
-							if (CheckStringParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								return false;
-							}
-						}
-					}
+					throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
 				}
-			}
-			catch (Exception ex)
-			{
-				Protocol.Log($"QA{Protocol.QActionID}|{Protocol.GetTriggerParameter()}|PollableBase.CheckDependencies|Exception thrown:{Environment.NewLine}{ex}", LogType.Error, LogLevel.NoLogging);
 
-				PollInfo = "Something went wrong. Please check logs.";
-				return false;
-			}
+				if (Children.Contains(child))
+				{
+					return;
+				}
 
-			PollInfo = string.Empty;
-			return true;
+				child.AddParent(this);
+				Children.Add(child);
+			}
 		}
 
 		/// <summary>
 		/// Adds a dependency.
 		/// </summary>
-		/// <param name="paramId">Id of parameter on which this row is depending.</param>
-		/// <param name="dependency">Dependency object.</param>
+		/// <param name="paramId">The parameter ID of the dependency.</param>
+		/// <param name="dependency">The dependency details.</param>
 		public void AddDependency(int paramId, Dependency dependency)
 		{
 			Dependencies.Add(paramId, dependency);
+		}
+
+		/// <summary>
+		/// Link parameter Id's to poll entry, this is then used to clear the parameters when polling is disabled.
+		/// </summary>
+		/// <param name="singleParameters">A dictionary of single parameters with their IDs and values.</param>
+		/// <param name="tableParameters">A list of table parameter IDs.</param>
+		public void AddParameters(Dictionary<int, object> singleParameters, List<int> tableParameters)
+		{
+			foreach (var pair in singleParameters)
+			{
+				_singleParameterIds[pair.Key] = pair.Value; // Overwrites if the key exists
+			}
+
+			_tableParameterIds.AddRange(tableParameters);
+			_tableParameterIds = _tableParameterIds.Distinct().ToList();
 		}
 
 		/// <summary>
@@ -202,48 +181,141 @@
 		}
 
 		/// <summary>
-		/// Adds child without creating two way relation between elements. This shouldn't be used directly. Use <see cref="AddChildren"/> instead.
+		/// Gets dependent parameters and compares their values with dependencies. Sets <see cref="PollInfo"/> to first condition not satisfied.
 		/// </summary>
-		/// <param name="child">Child element.</param>
-		/// <exception cref="InvalidOperationException">Throws if <paramref name="child"/> is already this elements parent.</exception>
-		void IPollable.AddChild(IPollable child)
+		/// <returns>False if any condition is not satisfied, otherwise true.</returns>
+		public bool CheckDependencies()
 		{
-			if (Parents.Contains(child))
+			try
 			{
-				throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
-			}
+				foreach (KeyValuePair<int, Dependency> dependency in Dependencies)
+				{
+					object parameter = Protocol.GetParameter(dependency.Key)
+						?? throw new Exception($"Parameter with ID '{dependency.Key}' doesn't exist.");
 
-			if (Children.Contains(child))
+					if (dependency.Value.Value is double)
+					{
+						if (dependency.Value.ShouldEqual)
+						{
+							if (!CheckDoubleParameter(parameter, dependency.Value.Value))
+							{
+								PollInfo = dependency.Value.Message;
+								PollStatus = PollStatus.Failed;
+								LastPoll = DateTime.Now;
+								return false;
+							}
+						}
+						else
+						{
+							if (CheckDoubleParameter(parameter, dependency.Value.Value))
+							{
+								PollInfo = dependency.Value.Message;
+								PollStatus = PollStatus.Failed;
+								LastPoll = DateTime.Now;
+								return false;
+							}
+						}
+					}
+					else if (dependency.Value.Value is string)
+					{
+						if (dependency.Value.ShouldEqual)
+						{
+							if (!CheckStringParameter(parameter, dependency.Value.Value))
+							{
+								PollInfo = dependency.Value.Message;
+								PollStatus = PollStatus.Failed;
+								LastPoll = DateTime.Now;
+								return false;
+							}
+						}
+						else
+						{
+							if (CheckStringParameter(parameter, dependency.Value.Value))
+							{
+								PollInfo = dependency.Value.Message;
+								PollStatus = PollStatus.Failed;
+								LastPoll = DateTime.Now;
+								return false;
+							}
+						}
+					}
+				}
+
+				return true;
+			}
+			catch (Exception ex)
 			{
-				return;
-			}
+				Protocol.Log($"QA{Protocol.QActionID}|{Protocol.GetTriggerParameter()}|PollableBase.CheckDependencies|Exception thrown:{Environment.NewLine}{ex}", LogType.Error, LogLevel.NoLogging);
 
-			Children.Add(child);
+				PollInfo = "Something went wrong. Please check logs.";
+				return false;
+			}
 		}
 
 		/// <summary>
-		/// Adds children to this element, and adds this element as a parent of each child passed as parameter.
+		/// Clears all linked parameters when the polling entry <see cref="AdminStatus"/> is set to Disabled.
 		/// </summary>
-		/// <param name="children">Child elements.</param>
-		/// <exception cref="InvalidOperationException">Throws if any <paramref name="children"/> element is already this elements parent.</exception>
-		public void AddChildren(params IPollable[] children)
+		public void ClearParameters()
 		{
-			foreach (IPollable child in children)
+			if (_singleParameterIds.Any())
 			{
-				if (Parents.Contains(child))
-				{
-					throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
-				}
+				Protocol.SetParameters(_singleParameterIds.Keys.ToArray(), _singleParameterIds.Values.ToArray());
+			}
 
-				if (Children.Contains(child))
-				{
-					return;
-				}
-
-				child.AddParent(this);
-				Children.Add(child);
+			foreach (var tablePid in _tableParameterIds)
+			{
+				string[] keys = Protocol.GetKeys(tablePid);
+				Protocol.DeleteRow(tablePid, keys);
 			}
 		}
+
+		/// <summary>
+		/// This method gets called by <see cref="PollingManager"/>.
+		/// </summary>
+		/// <returns cref="PollableType">Will return <see cref="PollableType.TriggerAction"/> when a actionId is specified. Otherwise will return <see cref="PollableType.ProcessInCode"/>.</returns>
+		/// <exception cref="PollingException">Throws if the initiate of the poll fails.</exception>
+		public PollableType InitiatePoll()
+		{
+			try
+			{
+				PollConfiguration();
+				if (ActionId != 0)
+				{
+					Protocol.NotifyProtocol(221/*NT_RUN_ACTION*/, ActionId, null);
+					return PollableType.TriggerAction;
+				}
+				else
+				{
+					return PollableType.ProcessInCode;
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex is PollingException ? ex : new PollingException("Failed to initiate the poll.", ex);
+			}
+		}
+
+		/// <summary>
+		/// Updates current state of <see cref="PollableBase"/>.
+		/// </summary>
+		/// <param name="row">Row on which to base the update.</param>
+		/// <exception cref="ArgumentException">Throws if <paramref name="row"/> has length less then 9.</exception>
+		public void Update(object[] row)
+		{
+			if (row.Length < 10)
+			{
+				throw new ArgumentException($"Parameter '{nameof(row)}' must have at least 9 elements, but has '{row.Length}'.");
+			}
+
+			Interval = Convert.ToDouble(row[(int)Column.Interval]);
+			PollInfo = Convert.ToString(row[(int)Column.PollInfo]) ?? string.Empty;
+			AdminStatus = (AdminState)Convert.ToDouble(row[(int)Column.AdminStatus]);
+		}
+
+		/// <summary>
+		/// Method to be implemented by extending class. This method gets called by <see cref="InitiatePoll"/>.
+		/// </summary>
+		protected abstract void PollConfiguration();
 
 		/// <summary>
 		/// Compares values of boxed double types.
@@ -269,7 +341,7 @@
 		private bool CheckStringParameter(object parameter, object value)
 		{
 			return parameter is string s
-				? s == (string)value
+				? string.Compare(s, (string)value, false) == 0
 				: throw new ArgumentException($"{nameof(parameter)} is not of type string.");
 		}
 	}

@@ -19,6 +19,7 @@ public static class QAction
 		{
 			// Polling Manager Initialization
 			var configuration = new PollingManagerConfiguration(protocol);
+			PollingManagerContainer.RemoveInstance(protocol);
 			PollingManagerContainer.AddManager(protocol, configuration);
 		}
 		catch (Exception ex)
