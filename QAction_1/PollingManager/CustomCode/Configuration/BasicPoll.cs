@@ -3,7 +3,7 @@
 	using Skyline.DataMiner.PollingManager;
 	using Skyline.DataMiner.Scripting;
 
-	internal class BasicPoll : PollableBase
+	public class BasicPoll : PollableBase
 	{
 		public BasicPoll(SLProtocol protocol, string description, int actionID) : base(protocol, description)
 		{

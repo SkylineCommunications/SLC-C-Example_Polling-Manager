@@ -2,7 +2,7 @@ using System;
 
 using Skyline.DataMiner.PollingManager;
 using Skyline.DataMiner.Scripting;
-using Skyline.Protocol.PollingManager;
+using Skyline.Protocol.PollingManager.CustomCode.Configuration;
 
 /// <summary>
 /// DataMiner QAction Class: After Startup.

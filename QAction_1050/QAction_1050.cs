@@ -2,6 +2,7 @@ using System;
 
 using Skyline.DataMiner.PollingManager;
 using Skyline.DataMiner.Scripting;
+using Skyline.Protocol.PollingManager.GenericAPI.Enums;
 using Skyline.Protocol.PollingManager.GenericAPI.Extensions;
 
 /// <summary>
