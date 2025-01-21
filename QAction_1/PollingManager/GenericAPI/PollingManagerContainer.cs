@@ -66,7 +66,7 @@
 					throw new InvalidOperationException($"Polling manager for element [{key}] is not initialized, please call AddManager first.");
 				}
 
-				protocol.CheckTrigger(initTrigger);
+				//protocol.CheckTrigger(initTrigger);
 			}
 
 			Managers[key].Protocol = protocol;

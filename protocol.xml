@@ -783,6 +783,7 @@ Note this will correspond to the default interval for data sets for which pollin
 			<Type>poll action</Type>
 			<Content>
 				<Action>2</Action>
+				<Action>3</Action>
 			</Content>
 		</Group>
 		<Group id="990">
@@ -856,6 +857,11 @@ Note this will correspond to the default interval for data sets for which pollin
 			<On id="2">parameter</On>
 			<Type>run actions</Type>
 		</Action>
+		<Action id="3">
+			<Name>Activate Timer</Name>
+			<On id="1">timer</On>
+			<Type>start</Type>
+		</Action>
 		<Action id="990">
 			<Name>Polling Manager - Process</Name>
 			<On id="990">parameter</On>
@@ -886,7 +892,7 @@ Note this will correspond to the default interval for data sets for which pollin
 	<Timers>
 		<Timer id="1" fixedTimer="true">
 			<Name>Very Fast Timer (1s)</Name>
-			<Time initial="true">1000</Time>
+			<Time initial="false">1000</Time>
 			<Interval>75</Interval>
 			<Content>
 				<Group>990</Group>
