@@ -294,7 +294,7 @@ This should only be used when applicable and on applicable data sets.
 			<Name>CpuTable</Name>
 			<Description>CPU</Description>
 			<Type>array</Type>
-			<ArrayOptions index="0">
+			<ArrayOptions index="0"  options=";volatile">
 				<ColumnOption idx="0" pid="101" type="retrieved" options=""/>
 				<ColumnOption idx="1" pid="102" type="retrieved" options="" />
 				<ColumnOption idx="2" pid="103" type="retrieved" options="" />
@@ -382,7 +382,7 @@ This should only be used when applicable and on applicable data sets.
 			<Name>InterfacesTable</Name>
 			<Description>Interfaces</Description>
 			<Type>array</Type>
-			<ArrayOptions index="0">
+			<ArrayOptions index="0"  options=";volatile">
 				<ColumnOption idx="0" pid="201" type="retrieved" options="" />
 				<ColumnOption idx="1" pid="202" type="retrieved" options="" />
 				<ColumnOption idx="2" pid="203" type="retrieved" options="" />
@@ -475,7 +475,7 @@ This should only be used when applicable and on applicable data sets.
 			<Name>VlanTable</Name>
 			<Description>VLAN</Description>
 			<Type>array</Type>
-			<ArrayOptions index="0">
+			<ArrayOptions index="0" options=";volatile">
 				<ColumnOption idx="0" pid="301" type="retrieved" options="" />
 				<ColumnOption idx="1" pid="302" type="retrieved" options="" />
 			</ArrayOptions>
@@ -538,7 +538,7 @@ This should only be used when applicable and on applicable data sets.
 			<Name>VlanPvstTable</Name>
 			<Description>VLAN PVST+ Info</Description>
 			<Type>array</Type>
-			<ArrayOptions index="0">
+			<ArrayOptions index="0" options=";volatile">
 				<ColumnOption idx="0" pid="401" type="retrieved" options="" />
 				<ColumnOption idx="1" pid="402" type="retrieved" options="" />
 			</ArrayOptions>
