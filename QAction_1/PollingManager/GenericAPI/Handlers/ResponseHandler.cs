@@ -2,6 +2,7 @@
 {
 	using System;
 	using Skyline.DataMiner.Scripting;
+	using Skyline.Protocol.PollingManager.CustomCode.Configuration;
 	using Skyline.Protocol.PollingManager.GenericAPI.Exceptions;
 
 	/// <summary>
@@ -12,13 +13,13 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResponseHandler"/> class.
 		/// </summary>
-		/// <param name="rowName">Link to PK of the <see cref="PollingmanagerQActionTable"/>.</param>
-		public ResponseHandler(string rowName)
+		/// <param name="entryName">Link to PK of the <see cref="PollingmanagerQActionTable"/>.</param>
+		protected ResponseHandler(PollEntrys entryName)
 		{
-			RowName = rowName;
+			EntryName = entryName.ToString();
 		}
 
-		public string RowName { get; }
+		public string EntryName { get; }
 
 		/// <summary>
 		/// Process the response for a row in the <see cref="PollingmanagerQActionTable"/>.
@@ -35,7 +36,7 @@
 			}
 			catch (Exception ex)
 			{
-				throw ex is PollingException ? ex : new PollingException("Failed to process the response.", ex);
+				throw ex is PollingException ? ex : new PollingException("Failed.", ex);
 			}
 		}
 

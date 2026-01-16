@@ -12,7 +12,10 @@
 	/// </summary>
 	public abstract class PollableBase : IPollable
 	{
+		private const int MinimumRowLength = 10;
+
 		private readonly Dictionary<int, object> _singleParameterIds;
+
 		private List<int> _tableParameterIds;
 
 		/// <summary>
@@ -20,23 +23,33 @@
 		/// </summary>
 		/// <param name="protocol">Link with SLProtocol process.</param>
 		/// <param name="description">Description of the PollingManager table row.</param>
-		public PollableBase(SLProtocol protocol, string description)
+		protected PollableBase(SLProtocol protocol, string description)
 		{
-			Protocol = protocol;
-			Description = description;
+			Protocol = protocol ?? throw new ArgumentNullException(nameof(protocol));
+			Description = description ?? throw new ArgumentNullException(nameof(description));
 			Interval = double.NaN;
 			SuggestedInterval = 10;
-			LastPoll = default;
+			LastPolled = default;
+			LastPollExecuted = default;
 			PollStatus = PollStatus.NotPolled;
 			PollInfo = string.Empty;
 			AdminStatus = AdminState.Enabled;
-			ActionId = 0;
+			TriggerId = 0;
+			StateSnmpPid = null;
 			Mandatory = false;
 			_singleParameterIds = new Dictionary<int, object>();
 			_tableParameterIds = new List<int>();
 		}
 
-		public int ActionId { get; set; }
+		protected PollableBase(SLProtocol protocol, string description, int triggerID) : this(protocol, description)
+		{
+			TriggerId = triggerID;
+		}
+
+		protected PollableBase(SLProtocol protocol, string description, int triggerID, int stateSnmpPid) : this(protocol, description, triggerID)
+		{
+			StateSnmpPid = stateSnmpPid;
+		}
 
 		public AdminState AdminStatus { get; set; }
 
@@ -50,7 +63,9 @@
 
 		public double Interval { get; set; }
 
-		public DateTime LastPoll { get; set; }
+		public DateTime LastPolled { get; set; }
+
+		public DateTime LastPollExecuted { get; set; }
 
 		public bool Mandatory { get; set; }
 
@@ -64,7 +79,11 @@
 
 		public SLProtocol Protocol { get; set; }
 
+		public int? StateSnmpPid { get; set; }
+
 		public double SuggestedInterval { get; set; }
+
+		public int TriggerId { get; set; }
 
 		/// <summary>
 		/// Adds child without creating two way relation between elements. This shouldn't be used directly. Use <see cref="AddChildren"/> instead.
@@ -75,7 +94,7 @@
 		{
 			if (Parents.Contains(child))
 			{
-				throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
+				throw new InvalidOperationException($"Circular dependency, '{$"{child.Name}"}' is already a parent of '{$"{Name}"}'.");
 			}
 
 			if (Children.Contains(child))
@@ -97,12 +116,12 @@
 			{
 				if (Parents.Contains(child))
 				{
-					throw new InvalidOperationException($"Circular dependency, '{child.Name}' is already a parent of '{Name}'.");
+					throw new InvalidOperationException($"Circular dependency, '{$"{child.Name}"}' is already a parent of '{$"{Name}"}'.");
 				}
 
 				if (Children.Contains(child))
 				{
-					return;
+					continue;  // Skip this child but continue with others
 				}
 
 				child.AddParent(this);
@@ -125,7 +144,7 @@
 		/// </summary>
 		/// <param name="singleParameters">A dictionary of single parameters with their IDs and values.</param>
 		/// <param name="tableParameters">A list of table parameter IDs.</param>
-		public void AddParameters(Dictionary<int, object> singleParameters, List<int> tableParameters)
+		public void AddParameters(IReadOnlyDictionary<int, object> singleParameters, IReadOnlyList<int> tableParameters)
 		{
 			foreach (var pair in singleParameters)
 			{
@@ -145,7 +164,7 @@
 		{
 			if (Children.Contains(parent))
 			{
-				throw new InvalidOperationException($"Circular dependency, '{parent.Name}' is already a child of '{Name}'.");
+				throw new InvalidOperationException($"Circular dependency, '{$"{parent.Name}"}' is already a child of '{$"{Name}"}'.");
 			}
 
 			if (Parents.Contains(parent))
@@ -167,12 +186,12 @@
 			{
 				if (Children.Contains(parent))
 				{
-					throw new InvalidOperationException($"Circular dependency, '{parent.Name}' is already a child of '{Name}'.");
+					throw new InvalidOperationException($"Circular dependency, '{$"{parent.Name}"}' is already a child of '{$"{Name}"}'.");
 				}
 
 				if (Parents.Contains(parent))
 				{
-					return;
+					continue;
 				}
 
 				parent.AddChild(this);
@@ -180,64 +199,19 @@
 			}
 		}
 
-		/// <summary>
-		/// Gets dependent parameters and compares their values with dependencies. Sets <see cref="PollInfo"/> to first condition not satisfied.
-		/// </summary>
-		/// <returns>False if any condition is not satisfied, otherwise true.</returns>
 		public bool CheckDependencies()
 		{
 			try
 			{
-				foreach (KeyValuePair<int, Dependency> dependency in Dependencies)
+				foreach (var dependency in Dependencies)
 				{
 					object parameter = Protocol.GetParameter(dependency.Key)
-						?? throw new Exception($"Parameter with ID '{dependency.Key}' doesn't exist.");
+						?? throw new NotSupportedException($"Parameter with ID '{dependency.Key}' doesn't exist.");
 
-					if (dependency.Value.Value is double)
+					if (!IsDependencySatisfied(parameter, dependency.Value))
 					{
-						if (dependency.Value.ShouldEqual)
-						{
-							if (!CheckDoubleParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								PollStatus = PollStatus.Failed;
-								LastPoll = DateTime.Now;
-								return false;
-							}
-						}
-						else
-						{
-							if (CheckDoubleParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								PollStatus = PollStatus.Failed;
-								LastPoll = DateTime.Now;
-								return false;
-							}
-						}
-					}
-					else if (dependency.Value.Value is string)
-					{
-						if (dependency.Value.ShouldEqual)
-						{
-							if (!CheckStringParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								PollStatus = PollStatus.Failed;
-								LastPoll = DateTime.Now;
-								return false;
-							}
-						}
-						else
-						{
-							if (CheckStringParameter(parameter, dependency.Value.Value))
-							{
-								PollInfo = dependency.Value.Message;
-								PollStatus = PollStatus.Failed;
-								LastPoll = DateTime.Now;
-								return false;
-							}
-						}
+						SetDependencyException(dependency);
+						return false;
 					}
 				}
 
@@ -246,7 +220,6 @@
 			catch (Exception ex)
 			{
 				Protocol.Log($"QA{Protocol.QActionID}|{Protocol.GetTriggerParameter()}|PollableBase.CheckDependencies|Exception thrown:{Environment.NewLine}{ex}", LogType.Error, LogLevel.NoLogging);
-
 				PollInfo = "Something went wrong. Please check logs.";
 				return false;
 			}
@@ -257,6 +230,11 @@
 		/// </summary>
 		public void ClearParameters()
 		{
+			if (StateSnmpPid.HasValue && StateSnmpPid.Value != 0)
+			{
+				Protocol.SetParameter(StateSnmpPid.Value, AdminState.Disabled);
+			}
+
 			if (_singleParameterIds.Any())
 			{
 				Protocol.SetParameters(_singleParameterIds.Keys.ToArray(), _singleParameterIds.Values.ToArray());
@@ -264,28 +242,29 @@
 
 			foreach (var tablePid in _tableParameterIds)
 			{
-				string[] keys = Protocol.GetKeys(tablePid);
-				Protocol.DeleteRow(tablePid, keys);
+				Protocol.ClearAllKeys(tablePid);
 			}
 		}
 
 		/// <summary>
 		/// This method gets called by <see cref="PollingManager"/>.
 		/// </summary>
-		/// <returns cref="PollableType">Will return <see cref="PollableType.TriggerAction"/> when a actionId is specified. Otherwise will return <see cref="PollableType.ProcessInCode"/>.</returns>
+		/// <returns cref="PollableType">Will return <see cref="PollableType.InitTrigger"/> when a triggerId is specified. Otherwise will return <see cref="PollableType.ProcessInCode"/>.</returns>
 		/// <exception cref="PollingException">Throws if the initiate of the poll fails.</exception>
 		public PollableType InitiatePoll()
 		{
 			try
 			{
-				PollConfiguration();
-				if (ActionId != 0)
+				LastPollExecuted = DateTime.Now;
+				PrePollConfiguration();
+				if (TriggerId != 0)
 				{
-					Protocol.NotifyProtocol(221/*NT_RUN_ACTION*/, ActionId, null);
-					return PollableType.TriggerAction;
+					Protocol.CheckTrigger(TriggerId);
+					return PollableType.InitTrigger;
 				}
 				else
 				{
+					Poll();
 					return PollableType.ProcessInCode;
 				}
 			}
@@ -302,9 +281,9 @@
 		/// <exception cref="ArgumentException">Throws if <paramref name="row"/> has length less then 9.</exception>
 		public void Update(object[] row)
 		{
-			if (row.Length < 10)
+			if (row.Length < MinimumRowLength)
 			{
-				throw new ArgumentException($"Parameter '{nameof(row)}' must have at least 9 elements, but has '{row.Length}'.");
+				throw new ArgumentException($"Parameter '{nameof(row)}' must have at least {MinimumRowLength} elements, but has '{row.Length}'.");
 			}
 
 			Interval = Convert.ToDouble(row[(int)Column.Interval]);
@@ -315,34 +294,43 @@
 		/// <summary>
 		/// Method to be implemented by extending class. This method gets called by <see cref="InitiatePoll"/>.
 		/// </summary>
-		protected abstract void PollConfiguration();
+		protected abstract void Poll();
 
 		/// <summary>
-		/// Compares values of boxed double types.
+		/// Method to be implemented by extending class. This method gets called by <see cref="InitiatePoll"/>.
 		/// </summary>
-		/// <param name="parameter">Parameter object.</param>
-		/// <param name="value">Object to compare value against.</param>
-		/// <returns>True if the boxed values are the same, otherwise false.</returns>
-		/// <exception cref="ArgumentException">Throws if boxed <paramref name="parameter"/> type is not double.</exception>
-		private bool CheckDoubleParameter(object parameter, object value)
+		protected abstract void PrePollConfiguration();
+
+		private static bool IsDependencySatisfied(object parameter, Dependency dependency)
 		{
-			return parameter is double d
-				? d == (double)value
-				: throw new ArgumentException($"{nameof(parameter)} is not of type double.");
+			if (dependency.Value is double expectedDouble)
+			{
+				if (!(parameter is double actualDouble))
+					throw new ArgumentException("Parameter is not of type double.");
+
+				return dependency.ShouldEqual ? actualDouble == expectedDouble : actualDouble != expectedDouble;
+			}
+			else if (dependency.Value is string expectedString)
+			{
+				if (!(parameter is string actualString))
+					throw new ArgumentException("Parameter is not of type string.");
+
+				var comparison = StringComparison.Ordinal;
+				bool equals = string.Compare(actualString, expectedString, comparison) == 0;
+				return dependency.ShouldEqual ? equals : !equals;
+			}
+			else
+			{
+				throw new ArgumentException("Unsupported parameter type.");
+			}
 		}
 
-		/// <summary>
-		/// Compares values of boxed string types.
-		/// </summary>
-		/// <param name="parameter">Parameter object.</param>
-		/// <param name="value">Object to compare value against.</param>
-		/// <returns>True if the boxed values are the same, otherwise false.</returns>
-		/// <exception cref="ArgumentException">Throws if boxed <paramref name="parameter"/> type is not string.</exception>
-		private bool CheckStringParameter(object parameter, object value)
+		private void SetDependencyException(KeyValuePair<int, Dependency> dependency)
 		{
-			return parameter is string s
-				? string.Compare(s, (string)value, false) == 0
-				: throw new ArgumentException($"{nameof(parameter)} is not of type string.");
+			PollInfo = dependency.Value.Message;
+			PollStatus = PollStatus.NotPolled;
+			LastPollExecuted = default;
+			LastPolled = default;
 		}
 	}
 }

@@ -7,7 +7,7 @@
 	/// </summary>
 	public interface IPollingManagerResponseHandler
 	{
-		string RowName { get; }
+		string EntryName { get; }
 
 		/// <summary>
 		/// Process the response for a row in the <see cref="PollingmanagerQActionTable"/>.

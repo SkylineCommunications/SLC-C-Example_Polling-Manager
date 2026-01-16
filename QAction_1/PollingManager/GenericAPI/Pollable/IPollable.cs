@@ -16,9 +16,14 @@
 		SLProtocol Protocol { get; set; }
 
 		/// <summary>
-		/// Gets or sets the action ID.
+		/// Gets or sets the trigger PID ID.
 		/// </summary>
-		int ActionId { get; set; }
+		int TriggerId { get; set; }
+
+		/// <summary>
+		/// Gets or sets the SNMP State PID ID.
+		/// </summary>
+		int? StateSnmpPid { get; set; }
 
 		/// <summary>
 		/// Gets or sets the unique identifier for the pollable item.
@@ -48,7 +53,12 @@
 		/// <summary>
 		/// Gets or sets the timestamp of the last poll.
 		/// </summary>
-		DateTime LastPoll { get; set; }
+		DateTime LastPolled { get; set; }
+
+		/// <summary>
+		/// Gets or sets the timestamp of the last poll execution.
+		/// </summary>
+		DateTime LastPollExecuted { get; set; }
 
 		/// <summary>
 		/// Gets or sets the current polling status.
@@ -66,19 +76,19 @@
 		AdminState AdminStatus { get; set; }
 
 		/// <summary>
-		/// Gets or sets the parent pollable items.
+		/// Gets the parent pollable items.
 		/// </summary>
-		List<IPollable> Parents { get; set; }
+		List<IPollable> Parents { get; }
 
 		/// <summary>
-		/// Gets or sets the child pollable items.
+		/// Gets the child pollable items.
 		/// </summary>
-		List<IPollable> Children { get; set; }
+		List<IPollable> Children { get; }
 
 		/// <summary>
-		/// Gets or sets the dependencies for the pollable item.
+		/// Gets the dependencies for the pollable item.
 		/// </summary>
-		Dictionary<int, Dependency> Dependencies { get; set; }
+		Dictionary<int, Dependency> Dependencies { get; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether polling is mandatory.
@@ -88,8 +98,7 @@
 		/// <summary>
 		/// This method gets called by <see cref="PollingManager"/>.
 		/// </summary>
-		/// <returns cref="PollableType">Will return <see cref="PollableType.TriggerAction"/> when a actionId is specified. Otherwise will return <see cref="PollableType.ProcessInCode"/>.</returns>
-		/// <exception cref="PollingException">Throws if the initiate of the poll fails.</exception>
+		/// <returns cref="PollableType">Will return <see cref="PollableType.InitTrigger"/> when a actionId is specified. Otherwise will return <see cref="PollableType.ProcessInCode"/>.</returns>
 		PollableType InitiatePoll();
 
 		/// <summary>
@@ -108,7 +117,7 @@
 		/// </summary>
 		/// <param name="singleParameters">A dictionary of single parameters with their IDs and values.</param>
 		/// <param name="tableParameters">A list of table parameter IDs.</param>
-		void AddParameters(Dictionary<int, object> singleParameters, List<int> tableParameters);
+		void AddParameters(IReadOnlyDictionary<int, object> singleParameters, IReadOnlyList<int> tableParameters);
 
 		/// <summary>
 		/// Adds a dependency to the pollable item.

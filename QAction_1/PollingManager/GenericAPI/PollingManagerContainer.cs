@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Concurrent;
 	using Skyline.DataMiner.Scripting;
+	using Skyline.Protocol.PollingManager.CustomCode.Configuration;
 
 	/// <summary>
 	/// <see cref="PollingManager"/> container class used to provide singleton on the element level.
@@ -10,6 +11,49 @@
 	public static class PollingManagerContainer
 	{
 		private static readonly ConcurrentDictionary<string, PollingManager> Managers = new ConcurrentDictionary<string, PollingManager>();
+
+		/// <summary>
+		/// Gets the <see cref="PollingManager"/> instance for the element.
+		/// </summary>
+		/// <param name="protocol">Link with SLProtocol process.</param>
+		/// <returns><see cref="PollingManager"/> instance with updated <see cref="PollableBase.Protocol"/>.</returns>
+		public static PollingManager GetManager(SLProtocol protocol)
+		{
+			if (!TryGetManager(protocol, out PollingManager manager))
+			{
+				return AddManager(protocol, new PollingManagerConfiguration(protocol));
+			}
+
+			manager.Protocol = protocol;
+			return manager;
+		}
+
+		/// <summary>
+		/// Initiates the <see cref="PollingManager"/> instance for the element.
+		/// </summary>
+		/// <param name="protocol">Link with SLProtocol process.</param>
+		/// <returns><see cref="PollingManager"/> instance with updated <see cref="PollableBase.Protocol"/>.</returns>
+		public static PollingManager InitiateManagerAfterStartup(SLProtocol protocol)
+		{
+			if (TryGetManager(protocol, out _))
+			{
+				protocol.Log($"Polling manager for element already exists. Reinitializing manager", LogType.Information, LogLevel.NoLogging);
+				TryRemoveInstance(protocol);
+			}
+
+			return AddManager(protocol, new PollingManagerConfiguration(protocol));
+		}
+
+		/// <summary>
+		/// Removes the <see cref="PollingManager"/> instance for the element.
+		/// </summary>
+		/// <param name="protocol">Link with SLProtocol process.</param>
+		/// <returns>True if the element is successfully found and removed, false otherwise.</returns>
+		public static bool TryRemoveInstance(SLProtocol protocol)
+		{
+			var instanceKey = GetKey(protocol);
+			return Managers.TryRemove(instanceKey, out _);
+		}
 
 		/// <summary>
 		/// Creates instance of <see cref="PollingManager"/> and adds it to <see cref="PollingManagerContainer"/>.
@@ -20,7 +64,7 @@
 		/// Newly created instance of <see cref="PollingManager"/>, if it doesn't exist, or existing instance of <see cref="PollingManager"/> with updated <see cref="PollableBase.Protocol"/>.
 		/// </returns>
 		/// <exception cref="ArgumentException">Throws if creation of <see cref="PollingManager"/> fails.</exception>
-		public static PollingManager AddManager(SLProtocol protocol, PollingManagerConfigurationBase configuration)
+		private static PollingManager AddManager(SLProtocol protocol, PollingManagerConfigurationBase configuration)
 		{
 			string key = GetKey(protocol);
 
@@ -47,46 +91,6 @@
 		}
 
 		/// <summary>
-		/// Gets the <see cref="PollingManager"/> instance for the element.
-		/// </summary>
-		/// <param name="protocol">Link with SLProtocol process.</param>
-		/// <param name="initTrigger">Id of the trigger that initializes <see cref="PollingManager"/>.</param>
-		/// <returns><see cref="PollingManager"/> instance with updated <see cref="PollableBase.Protocol"/>.</returns>
-		/// <exception cref="InvalidOperationException">Throws if <see cref="PollingManager"/> for this element is not initialized.</exception>
-		public static PollingManager GetManager(SLProtocol protocol, int initTrigger)
-		{
-			string key = GetKey(protocol);
-
-			if (!Managers.ContainsKey(key))
-			{
-				var table = new PollingmanagerQActionTable(protocol, Parameter.Pollingmanager.tablePid, "Polling Manager");
-
-				if (table.RowCount == 0)
-				{
-					throw new InvalidOperationException($"Polling manager for element [{key}] is not initialized, please call AddManager first.");
-				}
-
-				//protocol.CheckTrigger(initTrigger);
-			}
-
-			Managers[key].Protocol = protocol;
-
-			return Managers[key];
-		}
-
-		/// <summary>
-		/// Removes the <see cref="PollingManager"/> instance for the element.
-		/// </summary>
-		/// <param name="protocol">Link with SLProtocol process.</param>
-		/// <returns>True if the element is successfully found and removed, false otherwise.</returns>
-		public static bool RemoveInstance(SLProtocol protocol)
-		{
-			string key = GetKey(protocol);
-
-			return Managers.TryRemove(key, out _);
-		}
-
-		/// <summary>
 		/// Creates unique key based on DataMinerID and ElementID.
 		/// </summary>
 		/// <param name="protocol">Link with SLProtocol process.</param>
@@ -94,6 +98,18 @@
 		private static string GetKey(SLProtocol protocol)
 		{
 			return string.Join("/", protocol.DataMinerID, protocol.ElementID);
+		}
+
+		/// <summary>
+		/// Retrieves the <see cref="PollingManager"/> instance for the element.
+		/// </summary>
+		/// <param name="protocol">Link with SLProtocol process.</param>
+		/// <param name="manager"><see cref="PollingManager"/> instance.</param>
+		/// <returns>True if the <see cref="PollingManager"/> instance is successfully found, false otherwise.</returns>
+		private static bool TryGetManager(SLProtocol protocol, out PollingManager manager)
+		{
+			var instanceKey = GetKey(protocol);
+			return Managers.TryGetValue(instanceKey, out manager);
 		}
 	}
 }

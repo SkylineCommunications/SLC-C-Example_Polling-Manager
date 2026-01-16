@@ -25,19 +25,29 @@ public static class Parameter
 	public const int systemname = 20;
 	/// <summary>PID: 21 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public const int serialNumber_21 = 21;
+	public const int serialnumber_21 = 21;
 	/// <summary>PID: 21 | Type: read</summary>
-	public const int serialNumber = 21;
+	public const int serialnumber = 21;
+	/// <summary>PID: 30 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public const int temp1_30 = 30;
+	/// <summary>PID: 30 | Type: read</summary>
+	public const int temp1 = 30;
+	/// <summary>PID: 31 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public const int temp2_31 = 31;
+	/// <summary>PID: 31 | Type: read</summary>
+	public const int temp2 = 31;
 	/// <summary>PID: 61001 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public const int process_basic_dataset_61001 = 61001;
+	public const int process_system_information_61001 = 61001;
 	/// <summary>PID: 61001 | Type: read</summary>
-	public const int process_basic_dataset = 61001;
+	public const int process_system_information = 61001;
 	/// <summary>PID: 61002 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public const int process_basic_fail_dataset_61002 = 61002;
+	public const int process_temperature_information_61002 = 61002;
 	/// <summary>PID: 61002 | Type: read</summary>
-	public const int process_basic_fail_dataset = 61002;
+	public const int process_temperature_information = 61002;
 	public class Write
 	{
 		/// <summary>PID: 55 | Type: write</summary>
@@ -61,7 +71,7 @@ public static class Parameter
 		/// <summary>PID: 1056 | Type: write</summary>
 		public const int pollingmanager_adminstatus = 1056;
 	}
-	public class Dummydata
+	public class Cputable
 	{
 		/// <summary>PID: 100</summary>
 		public const int tablePid = 100;
@@ -73,19 +83,19 @@ public static class Parameter
 		{
 			/// <summary>PID: 101 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int dummydatainstance_101 = 101;
+			public const int cputableinstance_101 = 101;
 			/// <summary>PID: 101 | Type: read</summary>
-			public const int dummydatainstance = 101;
+			public const int cputableinstance = 101;
 			/// <summary>PID: 102 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int dummydatadescription_102 = 102;
+			public const int cputabledescription_102 = 102;
 			/// <summary>PID: 102 | Type: read</summary>
-			public const int dummydatadescription = 102;
+			public const int cputabledescription = 102;
 			/// <summary>PID: 103 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int dummydatastatus_103 = 103;
+			public const int cputabletotal_103 = 103;
 			/// <summary>PID: 103 | Type: read</summary>
-			public const int dummydatastatus = 103;
+			public const int cputabletotal = 103;
 			public class Write
 			{
 			}
@@ -94,19 +104,143 @@ public static class Parameter
 		{
 			/// <summary>IDX: 0 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int dummydatainstance_101 = 0;
+			public const int cputableinstance_101 = 0;
 			/// <summary>IDX: 0 | Type: read</summary>
-			public const int dummydatainstance = 0;
+			public const int cputableinstance = 0;
 			/// <summary>IDX: 1 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int dummydatadescription_102 = 1;
+			public const int cputabledescription_102 = 1;
 			/// <summary>IDX: 1 | Type: read</summary>
-			public const int dummydatadescription = 1;
+			public const int cputabledescription = 1;
 			/// <summary>IDX: 2 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int dummydatastatus_103 = 2;
+			public const int cputabletotal_103 = 2;
 			/// <summary>IDX: 2 | Type: read</summary>
-			public const int dummydatastatus = 2;
+			public const int cputabletotal = 2;
+		}
+	}
+	public class Interfacestable
+	{
+		/// <summary>PID: 200</summary>
+		public const int tablePid = 200;
+		/// <summary>IDX: 0</summary>
+		public const int indexColumn = 0;
+		/// <summary>PID: 201</summary>
+		public const int indexColumnPid = 201;
+		public class Pid
+		{
+			/// <summary>PID: 201 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int interfacesinstance_201 = 201;
+			/// <summary>PID: 201 | Type: read</summary>
+			public const int interfacesinstance = 201;
+			/// <summary>PID: 202 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int interfacesdescription_202 = 202;
+			/// <summary>PID: 202 | Type: read</summary>
+			public const int interfacesdescription = 202;
+			/// <summary>PID: 203 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int interfacesstatus_203 = 203;
+			/// <summary>PID: 203 | Type: read</summary>
+			public const int interfacesstatus = 203;
+			public class Write
+			{
+			}
+		}
+		public class Idx
+		{
+			/// <summary>IDX: 0 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int interfacesinstance_201 = 0;
+			/// <summary>IDX: 0 | Type: read</summary>
+			public const int interfacesinstance = 0;
+			/// <summary>IDX: 1 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int interfacesdescription_202 = 1;
+			/// <summary>IDX: 1 | Type: read</summary>
+			public const int interfacesdescription = 1;
+			/// <summary>IDX: 2 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int interfacesstatus_203 = 2;
+			/// <summary>IDX: 2 | Type: read</summary>
+			public const int interfacesstatus = 2;
+		}
+	}
+	public class Vlantable
+	{
+		/// <summary>PID: 300</summary>
+		public const int tablePid = 300;
+		/// <summary>IDX: 0</summary>
+		public const int indexColumn = 0;
+		/// <summary>PID: 301</summary>
+		public const int indexColumnPid = 301;
+		public class Pid
+		{
+			/// <summary>PID: 301 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanid_301 = 301;
+			/// <summary>PID: 301 | Type: read</summary>
+			public const int vlanid = 301;
+			/// <summary>PID: 302 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanname_302 = 302;
+			/// <summary>PID: 302 | Type: read</summary>
+			public const int vlanname = 302;
+			public class Write
+			{
+			}
+		}
+		public class Idx
+		{
+			/// <summary>IDX: 0 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanid_301 = 0;
+			/// <summary>IDX: 0 | Type: read</summary>
+			public const int vlanid = 0;
+			/// <summary>IDX: 1 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanname_302 = 1;
+			/// <summary>IDX: 1 | Type: read</summary>
+			public const int vlanname = 1;
+		}
+	}
+	public class Vlanpvsttable
+	{
+		/// <summary>PID: 400</summary>
+		public const int tablePid = 400;
+		/// <summary>IDX: 0</summary>
+		public const int indexColumn = 0;
+		/// <summary>PID: 401</summary>
+		public const int indexColumnPid = 401;
+		public class Pid
+		{
+			/// <summary>PID: 401 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanpvstid_401 = 401;
+			/// <summary>PID: 401 | Type: read</summary>
+			public const int vlanpvstid = 401;
+			/// <summary>PID: 402 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanpvststatus_402 = 402;
+			/// <summary>PID: 402 | Type: read</summary>
+			public const int vlanpvststatus = 402;
+			public class Write
+			{
+			}
+		}
+		public class Idx
+		{
+			/// <summary>IDX: 0 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanpvstid_401 = 0;
+			/// <summary>IDX: 0 | Type: read</summary>
+			public const int vlanpvstid = 0;
+			/// <summary>IDX: 1 | Type: read</summary>
+			[EditorBrowsable(EditorBrowsableState.Never)]
+			public const int vlanpvststatus_402 = 1;
+			/// <summary>IDX: 1 | Type: read</summary>
+			public const int vlanpvststatus = 1;
 		}
 	}
 	public class Pollingmanager
@@ -151,9 +285,9 @@ public static class Parameter
 			public const int pollingmanager_adminstatus = 1006;
 			/// <summary>PID: 1008 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int pollingmanager_lastpolltime_1008 = 1008;
+			public const int pollingmanager_lastpolledtime_1008 = 1008;
 			/// <summary>PID: 1008 | Type: read</summary>
-			public const int pollingmanager_lastpolltime = 1008;
+			public const int pollingmanager_lastpolledtime = 1008;
 			/// <summary>PID: 1009 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
 			public const int pollingmanager_lastpollstatus_1009 = 1009;
@@ -164,11 +298,11 @@ public static class Parameter
 			public const int pollingmanager_lastpollstatusinfo_1010 = 1010;
 			/// <summary>PID: 1010 | Type: read</summary>
 			public const int pollingmanager_lastpollstatusinfo = 1010;
-			/// <summary>PID: 998 | Type: read</summary>
+			/// <summary>PID: 1011 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int pollingmanager_displaykey_998 = 998;
-			/// <summary>PID: 998 | Type: read</summary>
-			public const int pollingmanager_displaykey = 998;
+			public const int pollingmanager_lastpollexecutiontime_1011 = 1011;
+			/// <summary>PID: 1011 | Type: read</summary>
+			public const int pollingmanager_lastpollexecutiontime = 1011;
 			public class Write
 			{
 				/// <summary>PID: 1057 | Type: write</summary>
@@ -212,9 +346,9 @@ public static class Parameter
 			public const int pollingmanager_adminstatus = 5;
 			/// <summary>IDX: 7 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int pollingmanager_lastpolltime_1008 = 7;
+			public const int pollingmanager_lastpolledtime_1008 = 7;
 			/// <summary>IDX: 7 | Type: read</summary>
-			public const int pollingmanager_lastpolltime = 7;
+			public const int pollingmanager_lastpolledtime = 7;
 			/// <summary>IDX: 8 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
 			public const int pollingmanager_lastpollstatus_1009 = 8;
@@ -227,9 +361,9 @@ public static class Parameter
 			public const int pollingmanager_lastpollstatusinfo = 9;
 			/// <summary>IDX: 10 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int pollingmanager_displaykey_998 = 10;
+			public const int pollingmanager_lastpollexecutiontime_1011 = 10;
 			/// <summary>IDX: 10 | Type: read</summary>
-			public const int pollingmanager_displaykey = 10;
+			public const int pollingmanager_lastpollexecutiontime = 10;
 		}
 	}
 }
@@ -254,7 +388,13 @@ public class WriteParameters
 public interface SLProtocolExt : SLProtocol
 {
 	/// <summary>PID: 100</summary>
-	DummydataQActionTable dummydata { get; set; }
+	CputableQActionTable cputable { get; set; }
+	/// <summary>PID: 200</summary>
+	InterfacestableQActionTable interfacestable { get; set; }
+	/// <summary>PID: 300</summary>
+	VlantableQActionTable vlantable { get; set; }
+	/// <summary>PID: 400</summary>
+	VlanpvsttableQActionTable vlanpvsttable { get; set; }
 	/// <summary>PID: 1000</summary>
 	PollingmanagerQActionTable pollingmanager { get; set; }
 	object Afterstartup_dummy { get; set; }
@@ -264,20 +404,36 @@ public interface SLProtocolExt : SLProtocol
 	object Readme { get; set; }
 	object Systemname_20 { get; set; }
 	object Systemname { get; set; }
-	object SerialNumber_21 { get; set; }
-	object SerialNumber { get; set; }
+	object Serialnumber_21 { get; set; }
+	object Serialnumber { get; set; }
+	object Temp1_30 { get; set; }
+	object Temp1 { get; set; }
+	object Temp2_31 { get; set; }
+	object Temp2 { get; set; }
 	object Apiversion_55 { get; set; }
-	object Dummydatainstance_101 { get; set; }
-	object Dummydatainstance { get; set; }
-	object Dummydatadescription_102 { get; set; }
-	object Dummydatadescription { get; set; }
-	object Dummydatastatus_103 { get; set; }
-	object Dummydatastatus { get; set; }
+	object Cputableinstance_101 { get; set; }
+	object Cputableinstance { get; set; }
+	object Cputabledescription_102 { get; set; }
+	object Cputabledescription { get; set; }
+	object Cputabletotal_103 { get; set; }
+	object Cputabletotal { get; set; }
+	object Interfacesinstance_201 { get; set; }
+	object Interfacesinstance { get; set; }
+	object Interfacesdescription_202 { get; set; }
+	object Interfacesdescription { get; set; }
+	object Interfacesstatus_203 { get; set; }
+	object Interfacesstatus { get; set; }
+	object Vlanid_301 { get; set; }
+	object Vlanid { get; set; }
+	object Vlanname_302 { get; set; }
+	object Vlanname { get; set; }
+	object Vlanpvstid_401 { get; set; }
+	object Vlanpvstid { get; set; }
+	object Vlanpvststatus_402 { get; set; }
+	object Vlanpvststatus { get; set; }
 	object Pollingmanager_runqaction_dummy { get; set; }
 	object Pollingmanager_contextmenu_997 { get; set; }
 	object Pollingmanager_contextmenu { get; set; }
-	object Pollingmanager_displaykey_998 { get; set; }
-	object Pollingmanager_displaykey { get; set; }
 	object Pollingmanager_name_1001 { get; set; }
 	object Pollingmanager_name { get; set; }
 	object Pollingmanager_id_1002 { get; set; }
@@ -290,26 +446,34 @@ public interface SLProtocolExt : SLProtocol
 	object Pollingmanager_suggestedinterval { get; set; }
 	object Pollingmanager_adminstatus_1006 { get; set; }
 	object Pollingmanager_adminstatus { get; set; }
-	object Pollingmanager_lastpolltime_1008 { get; set; }
-	object Pollingmanager_lastpolltime { get; set; }
+	object Pollingmanager_lastpolledtime_1008 { get; set; }
+	object Pollingmanager_lastpolledtime { get; set; }
 	object Pollingmanager_lastpollstatus_1009 { get; set; }
 	object Pollingmanager_lastpollstatus { get; set; }
 	object Pollingmanager_lastpollstatusinfo_1010 { get; set; }
 	object Pollingmanager_lastpollstatusinfo { get; set; }
+	object Pollingmanager_lastpollexecutiontime_1011 { get; set; }
+	object Pollingmanager_lastpollexecutiontime { get; set; }
 	object Pollingmanager_interval_1054 { get; set; }
 	object Pollingmanager_adminstatus_1056 { get; set; }
 	object Pollingmanager_poll_1057 { get; set; }
 	object Pollingmanager_poll { get; set; }
-	object Process_basic_dataset_61001 { get; set; }
-	object Process_basic_dataset { get; set; }
-	object Process_basic_fail_dataset_61002 { get; set; }
-	object Process_basic_fail_dataset { get; set; }
+	object Process_system_information_61001 { get; set; }
+	object Process_system_information { get; set; }
+	object Process_temperature_information_61002 { get; set; }
+	object Process_temperature_information { get; set; }
 	WriteParameters Write { get; set; }
 }
 public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 {
 	/// <summary>PID: 100</summary>
-	public DummydataQActionTable dummydata { get; set; }
+	public CputableQActionTable cputable { get; set; }
+	/// <summary>PID: 200</summary>
+	public InterfacestableQActionTable interfacestable { get; set; }
+	/// <summary>PID: 300</summary>
+	public VlantableQActionTable vlantable { get; set; }
+	/// <summary>PID: 400</summary>
+	public VlanpvsttableQActionTable vlanpvsttable { get; set; }
 	/// <summary>PID: 1000</summary>
 	public PollingmanagerQActionTable pollingmanager { get; set; }
 	/// <summary>PID: 2  | Type: dummy</summary>
@@ -331,38 +495,78 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Systemname {get { return GetParameter(20); }set { SetParameter(20, value); }}
 	/// <summary>PID: 21  | Type: read | EXCEPTIONS: N/A = -1</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object SerialNumber_21 {get { return GetParameter(21); }set { SetParameter(21, value); }}
+	public System.Object Serialnumber_21 {get { return GetParameter(21); }set { SetParameter(21, value); }}
 	/// <summary>PID: 21  | Type: read | EXCEPTIONS: N/A = -1</summary>
-	public System.Object SerialNumber {get { return GetParameter(21); }set { SetParameter(21, value); }}
+	public System.Object Serialnumber {get { return GetParameter(21); }set { SetParameter(21, value); }}
+	/// <summary>PID: 30  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Temp1_30 {get { return GetParameter(30); }set { SetParameter(30, value); }}
+	/// <summary>PID: 30  | Type: read</summary>
+	public System.Object Temp1 {get { return GetParameter(30); }set { SetParameter(30, value); }}
+	/// <summary>PID: 31  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Temp2_31 {get { return GetParameter(31); }set { SetParameter(31, value); }}
+	/// <summary>PID: 31  | Type: read</summary>
+	public System.Object Temp2 {get { return GetParameter(31); }set { SetParameter(31, value); }}
 	/// <summary>PID: 55  | Type: write | DISCREETS: 1.0 = Version1, 2.0 = Version2</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Apiversion_55 {get { return GetParameter(55); }set { SetParameter(55, value); }}
 	/// <summary>PID: 101  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Dummydatainstance_101 {get { return GetParameter(101); }set { SetParameter(101, value); }}
+	public System.Object Cputableinstance_101 {get { return GetParameter(101); }set { SetParameter(101, value); }}
 	/// <summary>PID: 101  | Type: read</summary>
-	public System.Object Dummydatainstance {get { return GetParameter(101); }set { SetParameter(101, value); }}
+	public System.Object Cputableinstance {get { return GetParameter(101); }set { SetParameter(101, value); }}
 	/// <summary>PID: 102  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Dummydatadescription_102 {get { return GetParameter(102); }set { SetParameter(102, value); }}
+	public System.Object Cputabledescription_102 {get { return GetParameter(102); }set { SetParameter(102, value); }}
 	/// <summary>PID: 102  | Type: read</summary>
-	public System.Object Dummydatadescription {get { return GetParameter(102); }set { SetParameter(102, value); }}
-	/// <summary>PID: 103  | Type: read | DISCREETS: Disabled = 0, Enabled = 1</summary>
+	public System.Object Cputabledescription {get { return GetParameter(102); }set { SetParameter(102, value); }}
+	/// <summary>PID: 103  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Dummydatastatus_103 {get { return GetParameter(103); }set { SetParameter(103, value); }}
-	/// <summary>PID: 103  | Type: read | DISCREETS: Disabled = 0, Enabled = 1</summary>
-	public System.Object Dummydatastatus {get { return GetParameter(103); }set { SetParameter(103, value); }}
+	public System.Object Cputabletotal_103 {get { return GetParameter(103); }set { SetParameter(103, value); }}
+	/// <summary>PID: 103  | Type: read</summary>
+	public System.Object Cputabletotal {get { return GetParameter(103); }set { SetParameter(103, value); }}
+	/// <summary>PID: 201  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Interfacesinstance_201 {get { return GetParameter(201); }set { SetParameter(201, value); }}
+	/// <summary>PID: 201  | Type: read</summary>
+	public System.Object Interfacesinstance {get { return GetParameter(201); }set { SetParameter(201, value); }}
+	/// <summary>PID: 202  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Interfacesdescription_202 {get { return GetParameter(202); }set { SetParameter(202, value); }}
+	/// <summary>PID: 202  | Type: read</summary>
+	public System.Object Interfacesdescription {get { return GetParameter(202); }set { SetParameter(202, value); }}
+	/// <summary>PID: 203  | Type: read | DISCREETS: Disabled = 0, Enabled = 1</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Interfacesstatus_203 {get { return GetParameter(203); }set { SetParameter(203, value); }}
+	/// <summary>PID: 203  | Type: read | DISCREETS: Disabled = 0, Enabled = 1</summary>
+	public System.Object Interfacesstatus {get { return GetParameter(203); }set { SetParameter(203, value); }}
+	/// <summary>PID: 301  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanid_301 {get { return GetParameter(301); }set { SetParameter(301, value); }}
+	/// <summary>PID: 301  | Type: read</summary>
+	public System.Object Vlanid {get { return GetParameter(301); }set { SetParameter(301, value); }}
+	/// <summary>PID: 302  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanname_302 {get { return GetParameter(302); }set { SetParameter(302, value); }}
+	/// <summary>PID: 302  | Type: read</summary>
+	public System.Object Vlanname {get { return GetParameter(302); }set { SetParameter(302, value); }}
+	/// <summary>PID: 401  | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanpvstid_401 {get { return GetParameter(401); }set { SetParameter(401, value); }}
+	/// <summary>PID: 401  | Type: read</summary>
+	public System.Object Vlanpvstid {get { return GetParameter(401); }set { SetParameter(401, value); }}
+	/// <summary>PID: 402  | Type: read | DISCREETS: Disabled = 0, Enabled = 1</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanpvststatus_402 {get { return GetParameter(402); }set { SetParameter(402, value); }}
+	/// <summary>PID: 402  | Type: read | DISCREETS: Disabled = 0, Enabled = 1</summary>
+	public System.Object Vlanpvststatus {get { return GetParameter(402); }set { SetParameter(402, value); }}
 	/// <summary>PID: 990  | Type: dummy</summary>
 	public System.Object Pollingmanager_runqaction_dummy {get { return GetParameter(990); }set { SetParameter(990, value); }}
 	/// <summary>PID: 997  | Type: write | DISCREETS: Enable = 1, Enable (Forced) = 2, Disable = 3, Disable (Forced) = 4, Poll = 5, Separator 1 = -1, Enable All = 11, Disable All = 12, Poll All = 13, Separator 2 = -2, Reset to Default = 21</summary>
 	public System.Object Pollingmanager_contextmenu_997 {get { return GetParameter(997); }set { SetParameter(997, value); }}
 	/// <summary>PID: 997  | Type: write | DISCREETS: Enable = 1, Enable (Forced) = 2, Disable = 3, Disable (Forced) = 4, Poll = 5, Separator 1 = -1, Enable All = 11, Disable All = 12, Poll All = 13, Separator 2 = -2, Reset to Default = 21</summary>
 	public System.Object Pollingmanager_contextmenu {get { return Write.Pollingmanager_contextmenu; }set { Write.Pollingmanager_contextmenu = value; }}
-	/// <summary>PID: 998  | Type: read</summary>
-	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Pollingmanager_displaykey_998 {get { return GetParameter(998); }set { SetParameter(998, value); }}
-	/// <summary>PID: 998  | Type: read</summary>
-	public System.Object Pollingmanager_displaykey {get { return GetParameter(998); }set { SetParameter(998, value); }}
 	/// <summary>PID: 1001  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Pollingmanager_name_1001 {get { return GetParameter(1001); }set { SetParameter(1001, value); }}
@@ -395,9 +599,9 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Pollingmanager_adminstatus {get { return GetParameter(1006); }set { SetParameter(1006, value); }}
 	/// <summary>PID: 1008  | Type: read | EXCEPTIONS: Not Polled = -2</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Pollingmanager_lastpolltime_1008 {get { return GetParameter(1008); }set { SetParameter(1008, value); }}
+	public System.Object Pollingmanager_lastpolledtime_1008 {get { return GetParameter(1008); }set { SetParameter(1008, value); }}
 	/// <summary>PID: 1008  | Type: read | EXCEPTIONS: Not Polled = -2</summary>
-	public System.Object Pollingmanager_lastpolltime {get { return GetParameter(1008); }set { SetParameter(1008, value); }}
+	public System.Object Pollingmanager_lastpolledtime {get { return GetParameter(1008); }set { SetParameter(1008, value); }}
 	/// <summary>PID: 1009  | Type: read | DISCREETS: Failed = 0, Succeeded = 1 | EXCEPTIONS: Disabled = -1, Not yet Polled = -2</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Pollingmanager_lastpollstatus_1009 {get { return GetParameter(1009); }set { SetParameter(1009, value); }}
@@ -408,6 +612,11 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Pollingmanager_lastpollstatusinfo_1010 {get { return GetParameter(1010); }set { SetParameter(1010, value); }}
 	/// <summary>PID: 1010  | Type: read | EXCEPTIONS: N/A = -1</summary>
 	public System.Object Pollingmanager_lastpollstatusinfo {get { return GetParameter(1010); }set { SetParameter(1010, value); }}
+	/// <summary>PID: 1011  | Type: read | EXCEPTIONS: Not Polled = -2</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Pollingmanager_lastpollexecutiontime_1011 {get { return GetParameter(1011); }set { SetParameter(1011, value); }}
+	/// <summary>PID: 1011  | Type: read | EXCEPTIONS: Not Polled = -2</summary>
+	public System.Object Pollingmanager_lastpollexecutiontime {get { return GetParameter(1011); }set { SetParameter(1011, value); }}
 	/// <summary>PID: 1054  | Type: write</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Pollingmanager_interval_1054 {get { return GetParameter(1054); }set { SetParameter(1054, value); }}
@@ -420,28 +629,52 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Pollingmanager_poll {get { return Write.Pollingmanager_poll; }set { Write.Pollingmanager_poll = value; }}
 	/// <summary>PID: 61001  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Process_basic_dataset_61001 {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
+	public System.Object Process_system_information_61001 {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
 	/// <summary>PID: 61001  | Type: read</summary>
-	public System.Object Process_basic_dataset {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
+	public System.Object Process_system_information {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
 	/// <summary>PID: 61002  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Process_basic_fail_dataset_61002 {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
+	public System.Object Process_temperature_information_61002 {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
 	/// <summary>PID: 61002  | Type: read</summary>
-	public System.Object Process_basic_fail_dataset {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
+	public System.Object Process_temperature_information {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
 	public WriteParameters Write { get; set; }
 	public ConcreteSLProtocolExt()
 	{
-		dummydata = new DummydataQActionTable(this, 100, "dummydata");
+		cputable = new CputableQActionTable(this, 100, "cputable");
+		interfacestable = new InterfacestableQActionTable(this, 200, "interfacestable");
+		vlantable = new VlantableQActionTable(this, 300, "vlantable");
+		vlanpvsttable = new VlanpvsttableQActionTable(this, 400, "vlanpvsttable");
 		pollingmanager = new PollingmanagerQActionTable(this, 1000, "pollingmanager");
 		Write = new WriteParameters(this);
 	}
 }
 /// <summary>IDX: 0</summary>
-public class DummydataQActionTable : QActionTable, IEnumerable<DummydataQActionRow>
+public class CputableQActionTable : QActionTable, IEnumerable<CputableQActionRow>
 {
-	public DummydataQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	public CputableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
 	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
-	public IEnumerator<DummydataQActionRow> GetEnumerator() { return new QActionTableEnumerator<DummydataQActionRow>(this); }
+	public IEnumerator<CputableQActionRow> GetEnumerator() { return new QActionTableEnumerator<CputableQActionRow>(this); }
+}
+/// <summary>IDX: 0</summary>
+public class InterfacestableQActionTable : QActionTable, IEnumerable<InterfacestableQActionRow>
+{
+	public InterfacestableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
+	public IEnumerator<InterfacestableQActionRow> GetEnumerator() { return new QActionTableEnumerator<InterfacestableQActionRow>(this); }
+}
+/// <summary>IDX: 0</summary>
+public class VlantableQActionTable : QActionTable, IEnumerable<VlantableQActionRow>
+{
+	public VlantableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
+	public IEnumerator<VlantableQActionRow> GetEnumerator() { return new QActionTableEnumerator<VlantableQActionRow>(this); }
+}
+/// <summary>IDX: 0</summary>
+public class VlanpvsttableQActionTable : QActionTable, IEnumerable<VlanpvsttableQActionRow>
+{
+	public VlanpvsttableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
+	public IEnumerator<VlanpvsttableQActionRow> GetEnumerator() { return new QActionTableEnumerator<VlanpvsttableQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
 public class PollingmanagerQActionTable : QActionTable, IEnumerable<PollingmanagerQActionRow>
@@ -451,27 +684,86 @@ public class PollingmanagerQActionTable : QActionTable, IEnumerable<Pollingmanag
 	public IEnumerator<PollingmanagerQActionRow> GetEnumerator() { return new QActionTableEnumerator<PollingmanagerQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
-public class DummydataQActionRow : QActionTableRow
+public class CputableQActionRow : QActionTableRow
 {
 	/// <summary>PID: 101 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Dummydatainstance_101 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	public System.Object Cputableinstance_101 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
 	/// <summary>PID: 101 | Type: read</summary>
-	public System.Object Dummydatainstance { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	public System.Object Cputableinstance { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
 	/// <summary>PID: 102 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Dummydatadescription_102 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public System.Object Cputabledescription_102 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
 	/// <summary>PID: 102 | Type: read</summary>
-	public System.Object Dummydatadescription { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public System.Object Cputabledescription { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
 	/// <summary>PID: 103 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Dummydatastatus_103 { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
+	public System.Object Cputabletotal_103 { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
 	/// <summary>PID: 103 | Type: read</summary>
-	public System.Object Dummydatastatus { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
-	public DummydataQActionRow() : base(0, 3) { }
-	public DummydataQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
-	public static implicit operator DummydataQActionRow(System.Object[] source) { return new DummydataQActionRow(source); }
-	public static implicit operator System.Object[](DummydataQActionRow source) { return source.ToObjectArray(); }
+	public System.Object Cputabletotal { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
+	public CputableQActionRow() : base(0, 3) { }
+	public CputableQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
+	public static implicit operator CputableQActionRow(System.Object[] source) { return new CputableQActionRow(source); }
+	public static implicit operator System.Object[](CputableQActionRow source) { return source.ToObjectArray(); }
+}
+/// <summary>IDX: 0</summary>
+public class InterfacestableQActionRow : QActionTableRow
+{
+	/// <summary>PID: 201 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Interfacesinstance_201 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	/// <summary>PID: 201 | Type: read</summary>
+	public System.Object Interfacesinstance { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	/// <summary>PID: 202 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Interfacesdescription_202 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	/// <summary>PID: 202 | Type: read</summary>
+	public System.Object Interfacesdescription { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	/// <summary>PID: 203 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Interfacesstatus_203 { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
+	/// <summary>PID: 203 | Type: read</summary>
+	public System.Object Interfacesstatus { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
+	public InterfacestableQActionRow() : base(0, 3) { }
+	public InterfacestableQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
+	public static implicit operator InterfacestableQActionRow(System.Object[] source) { return new InterfacestableQActionRow(source); }
+	public static implicit operator System.Object[](InterfacestableQActionRow source) { return source.ToObjectArray(); }
+}
+/// <summary>IDX: 0</summary>
+public class VlantableQActionRow : QActionTableRow
+{
+	/// <summary>PID: 301 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanid_301 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	/// <summary>PID: 301 | Type: read</summary>
+	public System.Object Vlanid { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	/// <summary>PID: 302 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanname_302 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	/// <summary>PID: 302 | Type: read</summary>
+	public System.Object Vlanname { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public VlantableQActionRow() : base(0, 2) { }
+	public VlantableQActionRow(System.Object[] oRow) : base(0, 2, oRow) { }
+	public static implicit operator VlantableQActionRow(System.Object[] source) { return new VlantableQActionRow(source); }
+	public static implicit operator System.Object[](VlantableQActionRow source) { return source.ToObjectArray(); }
+}
+/// <summary>IDX: 0</summary>
+public class VlanpvsttableQActionRow : QActionTableRow
+{
+	/// <summary>PID: 401 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanpvstid_401 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	/// <summary>PID: 401 | Type: read</summary>
+	public System.Object Vlanpvstid { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	/// <summary>PID: 402 | Type: read</summary>
+	[EditorBrowsable(EditorBrowsableState.Never)]
+	public System.Object Vlanpvststatus_402 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	/// <summary>PID: 402 | Type: read</summary>
+	public System.Object Vlanpvststatus { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public VlanpvsttableQActionRow() : base(0, 2) { }
+	public VlanpvsttableQActionRow(System.Object[] oRow) : base(0, 2, oRow) { }
+	public static implicit operator VlanpvsttableQActionRow(System.Object[] source) { return new VlanpvsttableQActionRow(source); }
+	public static implicit operator System.Object[](VlanpvsttableQActionRow source) { return source.ToObjectArray(); }
 }
 /// <summary>IDX: 0</summary>
 public class PollingmanagerQActionRow : QActionTableRow
@@ -512,9 +804,9 @@ public class PollingmanagerQActionRow : QActionTableRow
 	public System.Object Pollingmanager_poll { get { if (base.Columns.ContainsKey(6)) { return base.Columns[6]; } else { return null; } } set { if (base.Columns.ContainsKey(6)) { base.Columns[6] = value; } else { base.Columns.Add(6, value); } } }
 	/// <summary>PID: 1008 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Pollingmanager_lastpolltime_1008 { get { if (base.Columns.ContainsKey(7)) { return base.Columns[7]; } else { return null; } } set { if (base.Columns.ContainsKey(7)) { base.Columns[7] = value; } else { base.Columns.Add(7, value); } } }
+	public System.Object Pollingmanager_lastpolledtime_1008 { get { if (base.Columns.ContainsKey(7)) { return base.Columns[7]; } else { return null; } } set { if (base.Columns.ContainsKey(7)) { base.Columns[7] = value; } else { base.Columns.Add(7, value); } } }
 	/// <summary>PID: 1008 | Type: read</summary>
-	public System.Object Pollingmanager_lastpolltime { get { if (base.Columns.ContainsKey(7)) { return base.Columns[7]; } else { return null; } } set { if (base.Columns.ContainsKey(7)) { base.Columns[7] = value; } else { base.Columns.Add(7, value); } } }
+	public System.Object Pollingmanager_lastpolledtime { get { if (base.Columns.ContainsKey(7)) { return base.Columns[7]; } else { return null; } } set { if (base.Columns.ContainsKey(7)) { base.Columns[7] = value; } else { base.Columns.Add(7, value); } } }
 	/// <summary>PID: 1009 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Pollingmanager_lastpollstatus_1009 { get { if (base.Columns.ContainsKey(8)) { return base.Columns[8]; } else { return null; } } set { if (base.Columns.ContainsKey(8)) { base.Columns[8] = value; } else { base.Columns.Add(8, value); } } }
@@ -525,11 +817,11 @@ public class PollingmanagerQActionRow : QActionTableRow
 	public System.Object Pollingmanager_lastpollstatusinfo_1010 { get { if (base.Columns.ContainsKey(9)) { return base.Columns[9]; } else { return null; } } set { if (base.Columns.ContainsKey(9)) { base.Columns[9] = value; } else { base.Columns.Add(9, value); } } }
 	/// <summary>PID: 1010 | Type: read</summary>
 	public System.Object Pollingmanager_lastpollstatusinfo { get { if (base.Columns.ContainsKey(9)) { return base.Columns[9]; } else { return null; } } set { if (base.Columns.ContainsKey(9)) { base.Columns[9] = value; } else { base.Columns.Add(9, value); } } }
-	/// <summary>PID: 998 | Type: read</summary>
+	/// <summary>PID: 1011 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Pollingmanager_displaykey_998 { get { if (base.Columns.ContainsKey(10)) { return base.Columns[10]; } else { return null; } } set { if (base.Columns.ContainsKey(10)) { base.Columns[10] = value; } else { base.Columns.Add(10, value); } } }
-	/// <summary>PID: 998 | Type: read</summary>
-	public System.Object Pollingmanager_displaykey { get { if (base.Columns.ContainsKey(10)) { return base.Columns[10]; } else { return null; } } set { if (base.Columns.ContainsKey(10)) { base.Columns[10] = value; } else { base.Columns.Add(10, value); } } }
+	public System.Object Pollingmanager_lastpollexecutiontime_1011 { get { if (base.Columns.ContainsKey(10)) { return base.Columns[10]; } else { return null; } } set { if (base.Columns.ContainsKey(10)) { base.Columns[10] = value; } else { base.Columns.Add(10, value); } } }
+	/// <summary>PID: 1011 | Type: read</summary>
+	public System.Object Pollingmanager_lastpollexecutiontime { get { if (base.Columns.ContainsKey(10)) { return base.Columns[10]; } else { return null; } } set { if (base.Columns.ContainsKey(10)) { base.Columns[10] = value; } else { base.Columns.Add(10, value); } } }
 	public PollingmanagerQActionRow() : base(0, 11) { }
 	public PollingmanagerQActionRow(System.Object[] oRow) : base(0, 11, oRow) { }
 	public static implicit operator PollingmanagerQActionRow(System.Object[] source) { return new PollingmanagerQActionRow(source); }

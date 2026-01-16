@@ -19,7 +19,7 @@ public static class QAction
 		{
 			// Handles ContextMenu.
 			PollingManagerContainer
-				.GetManager(protocol, initTrigger: 1)
+				.GetManager(protocol)
 				.HandleContextMenu(contextMenu);
 		}
 		catch (Exception ex)

@@ -17,7 +17,7 @@ public static class QAction
 		try
 		{
 			PollingManagerContainer
-				.GetManager(protocol, initTrigger: 1)
+				.GetManager(protocol)
 				.CheckForUpdate();
 		}
 		catch (Exception ex)

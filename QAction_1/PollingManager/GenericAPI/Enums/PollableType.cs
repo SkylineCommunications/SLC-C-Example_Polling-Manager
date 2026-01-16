@@ -8,7 +8,7 @@
 		/// <summary>
 		/// The pollable triggers and action with actionId.
 		/// </summary>
-		TriggerAction,
+		InitTrigger,
 
 		/// <summary>
 		/// The pollalbe process the poll fully in Code.

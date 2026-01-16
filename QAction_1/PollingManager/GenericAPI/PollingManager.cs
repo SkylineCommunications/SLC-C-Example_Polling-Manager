@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Skyline.DataMiner.Net.Helper;
 	using Skyline.DataMiner.Scripting;
 	using Skyline.Protocol.PollingManager.GenericAPI.Enums;
 	using Skyline.Protocol.PollingManager.GenericAPI.Exceptions;
@@ -13,11 +14,15 @@
 	/// </summary>
 	public class PollingManager
 	{
+		private const string ExceptionValue = "-1";
+
 		private readonly Dictionary<int, ResponseHandler> responseHandlers;
 
 		private readonly Dictionary<string, PollableBase> rows = new Dictionary<string, PollableBase>();
 
 		private readonly int tablePid;
+
+		private SLProtocol protocol;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PollingManager"/> class.
@@ -32,19 +37,19 @@
 			Protocol = protocol;
 			this.tablePid = tablePid;
 			responseHandlers = configuration.ResponseHandlers;
-			var rows = configuration.ListRows;
+			var configurationRows = configuration.ListRows;
 
 			HashSet<string> names = new HashSet<string>();
 
-			for (int i = 0; i < rows.Count; i++)
+			for (int i = 0; i < configurationRows.Count; i++)
 			{
-				if (!names.Add(rows[i].Name))
+				if (!names.Add(configurationRows[i].Name))
 				{
-					throw new ArgumentException($"Duplicate name: {rows[i].Name}.");
+					throw new ArgumentException($"Duplicate name: {configurationRows[i].Name}.");
 				}
 
-				rows[i].ID = i + 1;
-				this.rows.Add(rows[i].Name, rows[i] ?? throw new ArgumentException("Rows parameter can't contain null values."));
+				configurationRows[i].ID = i + 1;
+				this.rows.Add(configurationRows[i].Name, configurationRows[i] ?? throw new ArgumentException("Rows parameter can't contain null values."));
 			}
 
 			if (protocol.RowCount(tablePid) != 0)
@@ -55,30 +60,37 @@
 			FillTable(this.rows);
 		}
 
-		public SLProtocol Protocol { get; set; }
+		public SLProtocol Protocol
+		{
+			get => protocol;
+			set
+			{
+				this.rows.ForEach(row => row.Value.Protocol = value);
+				protocol = value;
+			}
+		}
 
 		/// <summary>
 		/// Checks <see cref="PollingmanagerQActionTable"/> for rows that are ready to be polled and polls them.
 		/// </summary>
-		/// <exception cref="ArgumentException">
-		/// Throws if <see cref="PollableBase.IntervalType"/> is not <see cref="IntervalType.Default"/> or <see cref="IntervalType.Custom"/>.
-		/// </exception>
 		public void CheckForUpdate()
 		{
-			foreach (KeyValuePair<string, PollableBase> row in rows)
+			foreach (var row in rows.Values)
 			{
-				PollableBase currentRow = row.Value;
+				PollableBase currentRow = row;
 
 				if (currentRow.AdminStatus == AdminState.Disabled)
 				{
 					continue;
 				}
 
-				if (CheckLastPollTime(currentRow.Interval, currentRow.LastPoll))
+				if (CheckLastPollTime(currentRow.Interval, currentRow.LastPollExecuted))
 				{
 					PollRow(currentRow);
 				}
 			}
+
+			FillTableNoDelete(rows);
 		}
 
 		/// <summary>
@@ -93,19 +105,11 @@
 		/// <exception cref="ArgumentException">Throws if row key doesn't exist in the table.</exception>
 		public void HandleContextMenu(object contextMenu)
 		{
-			var input = contextMenu as string[]
-				?? throw new ArgumentException($"Parameter '{nameof(contextMenu)}' can't be converted to string[].");
+			CheckContextMenuInputData(contextMenu, out string[] input, out ContextMenuOption option);
 
-			if (!int.TryParse(input[1], out int value))
-			{
-				throw new ArgumentException($"Unable to parse selected option '{input[1]}' from '{nameof(contextMenu)}'.");
-			}
-
-			var option = (ContextMenuOption)value;
-			if (HasRowKeys(option) && input.Length <= 2)
-			{
-				throw new ArgumentException("Parameter is missing row keys.");
-			}
+			string[] rowIds = input.Skip(2).ToArray();
+			bool singleRow = input.Length == 3;
+			string singleRowId = singleRow ? input[2] : null;
 
 			switch (option)
 			{
@@ -114,70 +118,29 @@
 					break;
 
 				case ContextMenuOption.Disable:
-					if (input.Length == 3)
-					{
-						UpdateState(rows[input[2]], AdminState.Disabled);
-						break;
-					}
-
-					foreach (string rowId in input.Skip(2).ToArray())
-					{
-						UpdateState(rows[rowId], AdminState.Disabled);
-					}
-
+					ApplyAdminState(singleRow, singleRowId, rowIds, AdminState.Disabled);
 					break;
 
 				case ContextMenuOption.Enable:
-					if (input.Length == 3)
-					{
-						UpdateState(rows[input[2]], AdminState.Enabled);
-						break;
-					}
-
-					foreach (string rowId in input.Skip(2).ToArray())
-					{
-						UpdateState(rows[rowId], AdminState.Enabled);
-					}
-
+					ApplyAdminState(singleRow, singleRowId, rowIds, AdminState.Enabled);
 					break;
 
 				case ContextMenuOption.ForceDisable:
-					foreach (string rowId in input.Skip(2).ToArray())
-					{
-						UpdateState(rows[rowId], AdminState.ForceDisabled);
-					}
-
+					UpdateStates(rowIds, AdminState.ForceDisabled);
 					break;
 
 				case ContextMenuOption.ForceEnable:
-					foreach (string rowId in input.Skip(2).ToArray())
-					{
-						UpdateState(rows[rowId], AdminState.ForceEnabled);
-					}
-
+					UpdateStates(rowIds, AdminState.ForceEnabled);
 					break;
 
 				case ContextMenuOption.DisableAll:
-					foreach (KeyValuePair<string, PollableBase> row in rows)
-					{
-						if (row.Value.AdminStatus != AdminState.Disabled)
-						{
-							UpdateState(row.Value, AdminState.ForceDisabled);
-						}
-					}
-
+					ApplyAdminStateToAll(AdminState.ForceDisabled, AdminState.Disabled);
 					break;
 
 				case ContextMenuOption.EnableAll:
-					foreach (KeyValuePair<string, PollableBase> row in rows)
-					{
-						if (row.Value.AdminStatus != AdminState.Enabled)
-						{
-							UpdateState(row.Value, AdminState.ForceEnabled);
-						}
-					}
-
+					ApplyAdminStateToAll(AdminState.ForceEnabled, AdminState.Enabled);
 					break;
+
 				case ContextMenuOption.Poll:
 					if (input.Length == 3)
 					{
@@ -185,12 +148,13 @@
 						break;
 					}
 
-					foreach (string rowId in input.Skip(2).ToArray())
+					foreach (string rowId in rowIds)
 					{
 						PollRow(rows[rowId]);
 					}
 
 					break;
+
 				case ContextMenuOption.SuggestedInterval:
 					if (input.Length == 3)
 					{
@@ -198,12 +162,13 @@
 						break;
 					}
 
-					foreach (string rowId in input.Skip(2).ToArray())
+					foreach (string rowId in rowIds)
 					{
 						rows[rowId].Interval = rows[rowId].SuggestedInterval;
 					}
 
 					break;
+
 				default:
 					throw new ArgumentException($"Unsupported ContextMenuOption '{option}'.");
 			}
@@ -223,12 +188,10 @@
 		/// </exception>
 		public void HandleRowUpdate(string rowKey, Column column, object value)
 		{
-			if (!rows.ContainsKey(rowKey))
+			if (!rows.TryGetValue(rowKey, out PollableBase tableRow))
 			{
 				throw new ArgumentException($"Row key '{rowKey}' doesn't exist in the Polling Manager table.");
 			}
-
-			PollableBase tableRow;
 
 			switch (column)
 			{
@@ -263,23 +226,44 @@
 		{
 			if (!responseHandlers.TryGetValue(triggerId, out ResponseHandler handler))
 			{
-				throw new NotImplementedException($"No response handler implemented for id:{triggerId}.");
+				throw new NotSupportedException($"No response handler implemented for id:{triggerId}.");
 			}
 
 			try
 			{
-				if (rows[handler.RowName].AdminStatus.Equals(AdminState.Enabled))
+				if (rows[handler.EntryName].AdminStatus.Equals(AdminState.Enabled))
 				{
 					handler.Process(Protocol);
-					UpdatePollingStatus(rows[handler.RowName], PollStatus.Succeeded);
+					UpdatePollingStatus(rows[handler.EntryName], PollStatus.Succeeded);
 				}
+			}
+			catch (PollingException ex)
+			{
+				UpdatePollingStatus(rows[handler.EntryName], PollStatus.Failed, ex);
 			}
 			catch (Exception ex)
 			{
-				UpdatePollingStatus(rows[handler.RowName], PollStatus.Failed, ex is PollingException ? ex.Message : $"Failed to Process Response. {ex.Message}");
+				var pollException = new PollingException("Failed.", ex);
+				UpdatePollingStatus(rows[handler.EntryName], PollStatus.Failed, pollException);
 			}
 
 			FillTableNoDelete(rows);
+		}
+
+		private static void CheckContextMenuInputData(object contextMenu, out string[] input, out ContextMenuOption option)
+		{
+			input = contextMenu as string[]
+							?? throw new ArgumentException($"Parameter '{nameof(contextMenu)}' can't be converted to string[].");
+			if (!int.TryParse(input[1], out int value))
+			{
+				throw new ArgumentException($"Unable to parse selected option '{input[1]}' from '{nameof(contextMenu)}'.");
+			}
+
+			option = (ContextMenuOption)value;
+			if (HasRowKeys(option) && input.Length <= 2)
+			{
+				throw new ArgumentException("Parameter is missing row keys.");
+			}
 		}
 
 		/// <summary>
@@ -288,9 +272,101 @@
 		/// <param name="interval">Poll period.</param>
 		/// <param name="lastPoll">Last poll timestamp.</param>
 		/// <returns>True if poll period has elapsed, false otherwise.</returns>
-		private bool CheckLastPollTime(double interval, DateTime lastPoll)
+		private static bool CheckLastPollTime(double interval, DateTime lastPoll)
 		{
-			return (DateTime.Now - lastPoll).TotalSeconds > interval;
+			var currentTime = DateTime.Now;
+			return (currentTime - lastPoll).TotalSeconds > interval;
+		}
+
+		/// <summary>
+		/// Checks whether option with row keys was selected in context menu.
+		/// </summary>
+		/// <param name="option">Context menu option.</param>
+		/// <returns>True if option with row keys was selected, false otherwise.</returns>
+		private static bool HasRowKeys(ContextMenuOption option)
+		{
+			switch (option)
+			{
+				case ContextMenuOption.PollAll:
+					return false;
+
+				case ContextMenuOption.DisableAll:
+					return false;
+
+				case ContextMenuOption.EnableAll:
+					return false;
+
+				default:
+					return true;
+			}
+		}
+
+		/// <summary>
+		/// Polls a row.
+		/// </summary>
+		/// <param name="row">Row to poll.</param>
+		/// <returns>True if poll did occur, false otherwise.</returns>
+		private static bool PollRow(PollableBase row)
+		{
+			try
+			{
+				if (row.AdminStatus == AdminState.Disabled)
+				{
+					return false;
+				}
+
+				if (!row.CheckDependencies())
+				{
+					return false;
+				}
+
+				var pollableType = row.InitiatePoll();
+				if (pollableType.Equals(PollableType.ProcessInCode))
+				{
+					row.PollStatus = PollStatus.Succeeded;
+					row.LastPolled = DateTime.Now;
+					row.PollInfo = ExceptionValue;
+				}
+
+				return true;
+			}
+			catch (PollingException ex)
+			{
+				UpdatePollingStatus(row, PollStatus.Failed, ex);
+				return false;
+			}
+		}
+
+		private static void UpdatePollingStatus(IPollable row, PollStatus pollStatus, PollingException exception = null)
+		{
+			var message = exception == null ? ExceptionValue : exception.Message;
+			if (exception?.InnerException != null)
+			{
+				message = exception.InnerException.ToString();
+			}
+
+			row.PollStatus = pollStatus;
+			row.LastPolled = DateTime.Now;
+			row.PollInfo = message;
+		}
+
+		private void ApplyAdminState(bool singleRow, string singleRowId, string[] rowIds, AdminState state)
+		{
+			if (singleRow)
+				UpdateState(rows[singleRowId], state);
+			else
+				UpdateStates(rowIds, state);
+		}
+
+		private void ApplyAdminStateToAll(AdminState forceState, AdminState currentStateCheck)
+		{
+			foreach (var row in rows.Values)
+			{
+				if (row.AdminStatus != currentStateCheck)
+				{
+					UpdateState(row, forceState);
+				}
+			}
 		}
 
 		/// <summary>
@@ -301,7 +377,12 @@
 		private PollingmanagerQActionRow CreateTableRow(PollableBase value)
 		{
 			value.Description = string.IsNullOrWhiteSpace(value.Description) ? value.Name : value.Description;
-			value.Interval = value.Interval.Equals(double.NaN) ? value.SuggestedInterval : value.Interval;
+			value.Interval = double.IsNaN(value.Interval) ? value.SuggestedInterval : value.Interval;
+
+			if (value.StateSnmpPid != null)
+			{
+				protocol.SetParameter((int)value.StateSnmpPid, value.AdminStatus == AdminState.Enabled ? AdminState.Enabled : AdminState.Disabled);
+			}
 
 			return new PollingmanagerQActionRow
 			{
@@ -311,7 +392,8 @@
 				Pollingmanager_interval = value.Interval,
 				Pollingmanager_suggestedinterval = value.SuggestedInterval,
 				Pollingmanager_adminstatus = value.AdminStatus,
-				Pollingmanager_lastpolltime = value.LastPoll == default ? Convert.ToDouble(PollStatus.NotPolled) : value.LastPoll.ToOADate(),
+				Pollingmanager_lastpolledtime = value.LastPolled == default ? Convert.ToDouble(PollStatus.NotPolled) : value.LastPolled.ToOADate(),
+				Pollingmanager_lastpollexecutiontime = value.LastPollExecuted == default ? Convert.ToDouble(PollStatus.NotPolled) : value.LastPollExecuted.ToOADate(),
 				Pollingmanager_lastpollstatus = value.AdminStatus == AdminState.Disabled ? PollStatus.Disabled : value.PollStatus,
 				Pollingmanager_lastpollstatusinfo = value.PollInfo,
 			};
@@ -341,7 +423,6 @@
 		private void FillTable(Dictionary<string, PollableBase> rows)
 		{
 			PollingmanagerQActionRow[] tableRows = CreateTableRows(rows);
-
 			Protocol.FillArray(tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
 		}
 
@@ -351,32 +432,14 @@
 		/// <param name="rows">Rows to add to the table.</param>
 		private void FillTableNoDelete(Dictionary<string, PollableBase> rows)
 		{
+			if (!rows.Any())
+			{
+				return;
+			}
+
 			PollingmanagerQActionRow[] tableRows = CreateTableRows(rows);
 
 			Protocol.FillArray(tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Partial);
-		}
-
-		/// <summary>
-		/// Checks whether option with row keys was selected in context menu.
-		/// </summary>
-		/// <param name="option">Context menu option.</param>
-		/// <returns>True if option with row keys was selected, false otherwise.</returns>
-		private bool HasRowKeys(ContextMenuOption option)
-		{
-			switch (option)
-			{
-				case ContextMenuOption.PollAll:
-					return false;
-
-				case ContextMenuOption.DisableAll:
-					return false;
-
-				case ContextMenuOption.EnableAll:
-					return false;
-
-				default:
-					return true;
-			}
 		}
 
 		/// <summary>
@@ -409,42 +472,6 @@
 			foreach (KeyValuePair<string, PollableBase> row in rows)
 			{
 				LoadRow(row.Key);
-			}
-		}
-
-		/// <summary>
-		/// Polls a row.
-		/// </summary>
-		/// <param name="row">Row to poll.</param>
-		/// <returns>True if poll did occur, false otherwise.</returns>
-		private bool PollRow(PollableBase row)
-		{
-			try
-			{
-				if (row.AdminStatus == AdminState.Disabled)
-				{
-					return false;
-				}
-
-				if (!row.CheckDependencies())
-				{
-					return false;
-				}
-
-				var pollableType = row.InitiatePoll();
-				if (pollableType.Equals(PollableType.ProcessInCode))
-				{
-					row.PollStatus = PollStatus.Succeeded;
-					row.LastPoll = DateTime.Now;
-					row.PollInfo = "-1";
-				}
-
-				return true;
-			}
-			catch (PollingException e)
-			{
-				UpdatePollingStatus(row, PollStatus.Failed, e.Message);
-				return false;
 			}
 		}
 
@@ -489,13 +516,6 @@
 			Protocol.ShowInformationMessage(message);
 		}
 
-		private void UpdatePollingStatus(IPollable row, PollStatus pollStatus, string lastPollInfo = "-1")
-		{
-			row.PollStatus = pollStatus;
-			row.LastPoll = DateTime.Now;
-			row.PollInfo = lastPollInfo;
-		}
-
 		/// <summary>
 		/// Updates row state.
 		/// </summary>
@@ -521,8 +541,9 @@
 
 					row.AdminStatus = AdminState.Disabled;
 					row.PollStatus = PollStatus.Disabled;
-					row.LastPoll = default;
-					row.PollInfo = "-1";
+					row.LastPolled = default;
+					row.LastPollExecuted = default;
+					row.PollInfo = ExceptionValue;
 					row.ClearParameters();
 					return;
 
@@ -535,6 +556,11 @@
 
 					row.AdminStatus = AdminState.Enabled;
 					row.PollStatus = PollStatus.NotPolled;
+					if (row.StateSnmpPid != null)
+					{
+						protocol.SetParameter((int)row.StateSnmpPid, AdminState.Enabled);
+					}
+
 					return;
 
 				case AdminState.ForceDisabled:
@@ -547,8 +573,9 @@
 
 					row.AdminStatus = AdminState.Disabled;
 					row.PollStatus = PollStatus.Disabled;
-					row.LastPoll = default;
-					row.PollInfo = "-1";
+					row.LastPolled = default;
+					row.LastPollExecuted = default;
+					row.PollInfo = ExceptionValue;
 					row.ClearParameters();
 					UpdateStates(row.Children, AdminState.ForceDisabled);
 					return;
@@ -556,8 +583,24 @@
 				case AdminState.ForceEnabled:
 					row.AdminStatus = AdminState.Enabled;
 					row.PollStatus = PollStatus.NotPolled;
+					if (row.StateSnmpPid != null)
+					{
+						protocol.SetParameter((int)row.StateSnmpPid, AdminState.Enabled);
+					}
+
 					UpdateStates(row.Parents, AdminState.ForceEnabled);
 					return;
+
+				default:
+					throw new ArgumentException($"Unsupported AdminState '{state}' for row '{row.Name}'.");
+			}
+		}
+
+		private void UpdateStates(string[] rowIds, AdminState state)
+		{
+			foreach (string rowId in rowIds)
+			{
+				UpdateState(rows[rowId], state);
 			}
 		}
 

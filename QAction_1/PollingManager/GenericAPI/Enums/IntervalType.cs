@@ -6,8 +6,9 @@
 	/// Represents period types of the <see cref="PollingmanagerQActionTable"/>.
 	/// </summary>
 	public enum IntervalType
-    {
-        Default = 1,
-        Custom = 2,
-    }
+	{
+		Default = 1,
+
+		Custom = 2,
+	}
 }

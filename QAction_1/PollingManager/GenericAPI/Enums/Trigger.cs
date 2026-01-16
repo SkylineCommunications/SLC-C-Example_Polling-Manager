@@ -8,7 +8,9 @@
 	public enum Trigger
 	{
 		Interval = 1054,
+
 		IntervalType = 1056,
+
 		Poll = 1057,
 	}
 }

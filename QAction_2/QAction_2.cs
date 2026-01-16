@@ -2,7 +2,6 @@ using System;
 
 using Skyline.DataMiner.PollingManager;
 using Skyline.DataMiner.Scripting;
-using Skyline.Protocol.PollingManager.CustomCode.Configuration;
 
 /// <summary>
 /// DataMiner QAction Class: After Startup.
@@ -18,9 +17,7 @@ public static class QAction
 		try
 		{
 			// Polling Manager Initialization
-			var configuration = new PollingManagerConfiguration(protocol);
-			PollingManagerContainer.RemoveInstance(protocol);
-			PollingManagerContainer.AddManager(protocol, configuration);
+			PollingManagerContainer.InitiateManagerAfterStartup(protocol);
 		}
 		catch (Exception ex)
 		{
