@@ -21,12 +21,12 @@
 			// Add Custom poll logic here if needed
 			Protocol.Log($"Polling '{Name}'.");
 			int dummyRows = 5;
-			List<VlanpvsttableQActionRow> tableRows = new List<VlanpvsttableQActionRow>();
+			List<VlanpvstQActionRow> tableRows = new List<VlanpvstQActionRow>();
 			Random random = new Random();
 
 			for (int i = 0; i < dummyRows; i++)
 			{
-				var row = new VlanpvsttableQActionRow
+				var row = new VlanpvstQActionRow
 				{
 					Vlanpvstid_401 = $"{i + 1000}",
 					Vlanpvststatus = random.Next(0, 2),
@@ -35,7 +35,7 @@
 				tableRows.Add(row);
 			}
 
-			Protocol.FillArray(Parameter.Vlanpvsttable.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
+			Protocol.FillArray(Parameter.Vlanpvst.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
 		}
 
 		protected override void PrePollConfiguration()

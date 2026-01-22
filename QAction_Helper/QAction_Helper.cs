@@ -40,14 +40,14 @@ public static class Parameter
 	public const int temp2 = 31;
 	/// <summary>PID: 61001 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public const int process_system_information_61001 = 61001;
+	public const int processsysteminformation_61001 = 61001;
 	/// <summary>PID: 61001 | Type: read</summary>
-	public const int process_system_information = 61001;
+	public const int processsysteminformation = 61001;
 	/// <summary>PID: 61002 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public const int process_temperature_information_61002 = 61002;
+	public const int processtemperatureinformation_61002 = 61002;
 	/// <summary>PID: 61002 | Type: read</summary>
-	public const int process_temperature_information = 61002;
+	public const int processtemperatureinformation = 61002;
 	public class Write
 	{
 		/// <summary>PID: 55 | Type: write</summary>
@@ -71,7 +71,7 @@ public static class Parameter
 		/// <summary>PID: 1056 | Type: write</summary>
 		public const int pollingmanager_adminstatus = 1056;
 	}
-	public class Cputable
+	public class Cpus
 	{
 		/// <summary>PID: 100</summary>
 		public const int tablePid = 100;
@@ -83,19 +83,19 @@ public static class Parameter
 		{
 			/// <summary>PID: 101 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int cputableinstance_101 = 101;
+			public const int cpusinstance_101 = 101;
 			/// <summary>PID: 101 | Type: read</summary>
-			public const int cputableinstance = 101;
+			public const int cpusinstance = 101;
 			/// <summary>PID: 102 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int cputabledescription_102 = 102;
+			public const int cpusdescription_102 = 102;
 			/// <summary>PID: 102 | Type: read</summary>
-			public const int cputabledescription = 102;
+			public const int cpusdescription = 102;
 			/// <summary>PID: 103 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int cputabletotal_103 = 103;
+			public const int cpustotal_103 = 103;
 			/// <summary>PID: 103 | Type: read</summary>
-			public const int cputabletotal = 103;
+			public const int cpustotal = 103;
 			public class Write
 			{
 			}
@@ -104,22 +104,22 @@ public static class Parameter
 		{
 			/// <summary>IDX: 0 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int cputableinstance_101 = 0;
+			public const int cpusinstance_101 = 0;
 			/// <summary>IDX: 0 | Type: read</summary>
-			public const int cputableinstance = 0;
+			public const int cpusinstance = 0;
 			/// <summary>IDX: 1 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int cputabledescription_102 = 1;
+			public const int cpusdescription_102 = 1;
 			/// <summary>IDX: 1 | Type: read</summary>
-			public const int cputabledescription = 1;
+			public const int cpusdescription = 1;
 			/// <summary>IDX: 2 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int cputabletotal_103 = 2;
+			public const int cpustotal_103 = 2;
 			/// <summary>IDX: 2 | Type: read</summary>
-			public const int cputabletotal = 2;
+			public const int cpustotal = 2;
 		}
 	}
-	public class Interfacestable
+	public class Interfaces
 	{
 		/// <summary>PID: 200</summary>
 		public const int tablePid = 200;
@@ -167,7 +167,7 @@ public static class Parameter
 			public const int interfacesstatus = 2;
 		}
 	}
-	public class Vlantable
+	public class Vlans
 	{
 		/// <summary>PID: 300</summary>
 		public const int tablePid = 300;
@@ -179,14 +179,14 @@ public static class Parameter
 		{
 			/// <summary>PID: 301 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int vlanid_301 = 301;
+			public const int vlansid_301 = 301;
 			/// <summary>PID: 301 | Type: read</summary>
-			public const int vlanid = 301;
+			public const int vlansid = 301;
 			/// <summary>PID: 302 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int vlanname_302 = 302;
+			public const int vlansname_302 = 302;
 			/// <summary>PID: 302 | Type: read</summary>
-			public const int vlanname = 302;
+			public const int vlansname = 302;
 			public class Write
 			{
 			}
@@ -195,17 +195,17 @@ public static class Parameter
 		{
 			/// <summary>IDX: 0 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int vlanid_301 = 0;
+			public const int vlansid_301 = 0;
 			/// <summary>IDX: 0 | Type: read</summary>
-			public const int vlanid = 0;
+			public const int vlansid = 0;
 			/// <summary>IDX: 1 | Type: read</summary>
 			[EditorBrowsable(EditorBrowsableState.Never)]
-			public const int vlanname_302 = 1;
+			public const int vlansname_302 = 1;
 			/// <summary>IDX: 1 | Type: read</summary>
-			public const int vlanname = 1;
+			public const int vlansname = 1;
 		}
 	}
-	public class Vlanpvsttable
+	public class Vlanpvst
 	{
 		/// <summary>PID: 400</summary>
 		public const int tablePid = 400;
@@ -388,13 +388,13 @@ public class WriteParameters
 public interface SLProtocolExt : SLProtocol
 {
 	/// <summary>PID: 100</summary>
-	CputableQActionTable cputable { get; set; }
+	CpusQActionTable cpus { get; set; }
 	/// <summary>PID: 200</summary>
-	InterfacestableQActionTable interfacestable { get; set; }
+	InterfacesQActionTable interfaces { get; set; }
 	/// <summary>PID: 300</summary>
-	VlantableQActionTable vlantable { get; set; }
+	VlansQActionTable vlans { get; set; }
 	/// <summary>PID: 400</summary>
-	VlanpvsttableQActionTable vlanpvsttable { get; set; }
+	VlanpvstQActionTable vlanpvst { get; set; }
 	/// <summary>PID: 1000</summary>
 	PollingmanagerQActionTable pollingmanager { get; set; }
 	object Afterstartup_dummy { get; set; }
@@ -411,22 +411,22 @@ public interface SLProtocolExt : SLProtocol
 	object Temp2_31 { get; set; }
 	object Temp2 { get; set; }
 	object Apiversion_55 { get; set; }
-	object Cputableinstance_101 { get; set; }
-	object Cputableinstance { get; set; }
-	object Cputabledescription_102 { get; set; }
-	object Cputabledescription { get; set; }
-	object Cputabletotal_103 { get; set; }
-	object Cputabletotal { get; set; }
+	object Cpusinstance_101 { get; set; }
+	object Cpusinstance { get; set; }
+	object Cpusdescription_102 { get; set; }
+	object Cpusdescription { get; set; }
+	object Cpustotal_103 { get; set; }
+	object Cpustotal { get; set; }
 	object Interfacesinstance_201 { get; set; }
 	object Interfacesinstance { get; set; }
 	object Interfacesdescription_202 { get; set; }
 	object Interfacesdescription { get; set; }
 	object Interfacesstatus_203 { get; set; }
 	object Interfacesstatus { get; set; }
-	object Vlanid_301 { get; set; }
-	object Vlanid { get; set; }
-	object Vlanname_302 { get; set; }
-	object Vlanname { get; set; }
+	object Vlansid_301 { get; set; }
+	object Vlansid { get; set; }
+	object Vlansname_302 { get; set; }
+	object Vlansname { get; set; }
 	object Vlanpvstid_401 { get; set; }
 	object Vlanpvstid { get; set; }
 	object Vlanpvststatus_402 { get; set; }
@@ -458,22 +458,22 @@ public interface SLProtocolExt : SLProtocol
 	object Pollingmanager_adminstatus_1056 { get; set; }
 	object Pollingmanager_poll_1057 { get; set; }
 	object Pollingmanager_poll { get; set; }
-	object Process_system_information_61001 { get; set; }
-	object Process_system_information { get; set; }
-	object Process_temperature_information_61002 { get; set; }
-	object Process_temperature_information { get; set; }
+	object Processsysteminformation_61001 { get; set; }
+	object Processsysteminformation { get; set; }
+	object Processtemperatureinformation_61002 { get; set; }
+	object Processtemperatureinformation { get; set; }
 	WriteParameters Write { get; set; }
 }
 public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 {
 	/// <summary>PID: 100</summary>
-	public CputableQActionTable cputable { get; set; }
+	public CpusQActionTable cpus { get; set; }
 	/// <summary>PID: 200</summary>
-	public InterfacestableQActionTable interfacestable { get; set; }
+	public InterfacesQActionTable interfaces { get; set; }
 	/// <summary>PID: 300</summary>
-	public VlantableQActionTable vlantable { get; set; }
+	public VlansQActionTable vlans { get; set; }
 	/// <summary>PID: 400</summary>
-	public VlanpvsttableQActionTable vlanpvsttable { get; set; }
+	public VlanpvstQActionTable vlanpvst { get; set; }
 	/// <summary>PID: 1000</summary>
 	public PollingmanagerQActionTable pollingmanager { get; set; }
 	/// <summary>PID: 2  | Type: dummy</summary>
@@ -513,19 +513,19 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Apiversion_55 {get { return GetParameter(55); }set { SetParameter(55, value); }}
 	/// <summary>PID: 101  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Cputableinstance_101 {get { return GetParameter(101); }set { SetParameter(101, value); }}
+	public System.Object Cpusinstance_101 {get { return GetParameter(101); }set { SetParameter(101, value); }}
 	/// <summary>PID: 101  | Type: read</summary>
-	public System.Object Cputableinstance {get { return GetParameter(101); }set { SetParameter(101, value); }}
+	public System.Object Cpusinstance {get { return GetParameter(101); }set { SetParameter(101, value); }}
 	/// <summary>PID: 102  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Cputabledescription_102 {get { return GetParameter(102); }set { SetParameter(102, value); }}
+	public System.Object Cpusdescription_102 {get { return GetParameter(102); }set { SetParameter(102, value); }}
 	/// <summary>PID: 102  | Type: read</summary>
-	public System.Object Cputabledescription {get { return GetParameter(102); }set { SetParameter(102, value); }}
+	public System.Object Cpusdescription {get { return GetParameter(102); }set { SetParameter(102, value); }}
 	/// <summary>PID: 103  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Cputabletotal_103 {get { return GetParameter(103); }set { SetParameter(103, value); }}
+	public System.Object Cpustotal_103 {get { return GetParameter(103); }set { SetParameter(103, value); }}
 	/// <summary>PID: 103  | Type: read</summary>
-	public System.Object Cputabletotal {get { return GetParameter(103); }set { SetParameter(103, value); }}
+	public System.Object Cpustotal {get { return GetParameter(103); }set { SetParameter(103, value); }}
 	/// <summary>PID: 201  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Interfacesinstance_201 {get { return GetParameter(201); }set { SetParameter(201, value); }}
@@ -543,14 +543,14 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Interfacesstatus {get { return GetParameter(203); }set { SetParameter(203, value); }}
 	/// <summary>PID: 301  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Vlanid_301 {get { return GetParameter(301); }set { SetParameter(301, value); }}
+	public System.Object Vlansid_301 {get { return GetParameter(301); }set { SetParameter(301, value); }}
 	/// <summary>PID: 301  | Type: read</summary>
-	public System.Object Vlanid {get { return GetParameter(301); }set { SetParameter(301, value); }}
+	public System.Object Vlansid {get { return GetParameter(301); }set { SetParameter(301, value); }}
 	/// <summary>PID: 302  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Vlanname_302 {get { return GetParameter(302); }set { SetParameter(302, value); }}
+	public System.Object Vlansname_302 {get { return GetParameter(302); }set { SetParameter(302, value); }}
 	/// <summary>PID: 302  | Type: read</summary>
-	public System.Object Vlanname {get { return GetParameter(302); }set { SetParameter(302, value); }}
+	public System.Object Vlansname {get { return GetParameter(302); }set { SetParameter(302, value); }}
 	/// <summary>PID: 401  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
 	public System.Object Vlanpvstid_401 {get { return GetParameter(401); }set { SetParameter(401, value); }}
@@ -629,52 +629,52 @@ public class ConcreteSLProtocolExt : ConcreteSLProtocol, SLProtocolExt
 	public System.Object Pollingmanager_poll {get { return Write.Pollingmanager_poll; }set { Write.Pollingmanager_poll = value; }}
 	/// <summary>PID: 61001  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Process_system_information_61001 {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
+	public System.Object Processsysteminformation_61001 {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
 	/// <summary>PID: 61001  | Type: read</summary>
-	public System.Object Process_system_information {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
+	public System.Object Processsysteminformation {get { return GetParameter(61001); }set { SetParameter(61001, value); }}
 	/// <summary>PID: 61002  | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Process_temperature_information_61002 {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
+	public System.Object Processtemperatureinformation_61002 {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
 	/// <summary>PID: 61002  | Type: read</summary>
-	public System.Object Process_temperature_information {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
+	public System.Object Processtemperatureinformation {get { return GetParameter(61002); }set { SetParameter(61002, value); }}
 	public WriteParameters Write { get; set; }
 	public ConcreteSLProtocolExt()
 	{
-		cputable = new CputableQActionTable(this, 100, "cputable");
-		interfacestable = new InterfacestableQActionTable(this, 200, "interfacestable");
-		vlantable = new VlantableQActionTable(this, 300, "vlantable");
-		vlanpvsttable = new VlanpvsttableQActionTable(this, 400, "vlanpvsttable");
+		cpus = new CpusQActionTable(this, 100, "cpus");
+		interfaces = new InterfacesQActionTable(this, 200, "interfaces");
+		vlans = new VlansQActionTable(this, 300, "vlans");
+		vlanpvst = new VlanpvstQActionTable(this, 400, "vlanpvst");
 		pollingmanager = new PollingmanagerQActionTable(this, 1000, "pollingmanager");
 		Write = new WriteParameters(this);
 	}
 }
 /// <summary>IDX: 0</summary>
-public class CputableQActionTable : QActionTable, IEnumerable<CputableQActionRow>
+public class CpusQActionTable : QActionTable, IEnumerable<CpusQActionRow>
 {
-	public CputableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	public CpusQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
 	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
-	public IEnumerator<CputableQActionRow> GetEnumerator() { return new QActionTableEnumerator<CputableQActionRow>(this); }
+	public IEnumerator<CpusQActionRow> GetEnumerator() { return new QActionTableEnumerator<CpusQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
-public class InterfacestableQActionTable : QActionTable, IEnumerable<InterfacestableQActionRow>
+public class InterfacesQActionTable : QActionTable, IEnumerable<InterfacesQActionRow>
 {
-	public InterfacestableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	public InterfacesQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
 	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
-	public IEnumerator<InterfacestableQActionRow> GetEnumerator() { return new QActionTableEnumerator<InterfacestableQActionRow>(this); }
+	public IEnumerator<InterfacesQActionRow> GetEnumerator() { return new QActionTableEnumerator<InterfacesQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
-public class VlantableQActionTable : QActionTable, IEnumerable<VlantableQActionRow>
+public class VlansQActionTable : QActionTable, IEnumerable<VlansQActionRow>
 {
-	public VlantableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	public VlansQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
 	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
-	public IEnumerator<VlantableQActionRow> GetEnumerator() { return new QActionTableEnumerator<VlantableQActionRow>(this); }
+	public IEnumerator<VlansQActionRow> GetEnumerator() { return new QActionTableEnumerator<VlansQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
-public class VlanpvsttableQActionTable : QActionTable, IEnumerable<VlanpvsttableQActionRow>
+public class VlanpvstQActionTable : QActionTable, IEnumerable<VlanpvstQActionRow>
 {
-	public VlanpvsttableQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
+	public VlanpvstQActionTable(SLProtocol protocol, int tableId, string tableName) : base(protocol, tableId, tableName) { }
 	IEnumerator IEnumerable.GetEnumerator() { return (IEnumerator) GetEnumerator(); }
-	public IEnumerator<VlanpvsttableQActionRow> GetEnumerator() { return new QActionTableEnumerator<VlanpvsttableQActionRow>(this); }
+	public IEnumerator<VlanpvstQActionRow> GetEnumerator() { return new QActionTableEnumerator<VlanpvstQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
 public class PollingmanagerQActionTable : QActionTable, IEnumerable<PollingmanagerQActionRow>
@@ -684,30 +684,30 @@ public class PollingmanagerQActionTable : QActionTable, IEnumerable<Pollingmanag
 	public IEnumerator<PollingmanagerQActionRow> GetEnumerator() { return new QActionTableEnumerator<PollingmanagerQActionRow>(this); }
 }
 /// <summary>IDX: 0</summary>
-public class CputableQActionRow : QActionTableRow
+public class CpusQActionRow : QActionTableRow
 {
 	/// <summary>PID: 101 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Cputableinstance_101 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	public System.Object Cpusinstance_101 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
 	/// <summary>PID: 101 | Type: read</summary>
-	public System.Object Cputableinstance { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	public System.Object Cpusinstance { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
 	/// <summary>PID: 102 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Cputabledescription_102 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public System.Object Cpusdescription_102 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
 	/// <summary>PID: 102 | Type: read</summary>
-	public System.Object Cputabledescription { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public System.Object Cpusdescription { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
 	/// <summary>PID: 103 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Cputabletotal_103 { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
+	public System.Object Cpustotal_103 { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
 	/// <summary>PID: 103 | Type: read</summary>
-	public System.Object Cputabletotal { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
-	public CputableQActionRow() : base(0, 3) { }
-	public CputableQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
-	public static implicit operator CputableQActionRow(System.Object[] source) { return new CputableQActionRow(source); }
-	public static implicit operator System.Object[](CputableQActionRow source) { return source.ToObjectArray(); }
+	public System.Object Cpustotal { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
+	public CpusQActionRow() : base(0, 3) { }
+	public CpusQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
+	public static implicit operator CpusQActionRow(System.Object[] source) { return new CpusQActionRow(source); }
+	public static implicit operator System.Object[](CpusQActionRow source) { return source.ToObjectArray(); }
 }
 /// <summary>IDX: 0</summary>
-public class InterfacestableQActionRow : QActionTableRow
+public class InterfacesQActionRow : QActionTableRow
 {
 	/// <summary>PID: 201 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
@@ -724,31 +724,31 @@ public class InterfacestableQActionRow : QActionTableRow
 	public System.Object Interfacesstatus_203 { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
 	/// <summary>PID: 203 | Type: read</summary>
 	public System.Object Interfacesstatus { get { if (base.Columns.ContainsKey(2)) { return base.Columns[2]; } else { return null; } } set { if (base.Columns.ContainsKey(2)) { base.Columns[2] = value; } else { base.Columns.Add(2, value); } } }
-	public InterfacestableQActionRow() : base(0, 3) { }
-	public InterfacestableQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
-	public static implicit operator InterfacestableQActionRow(System.Object[] source) { return new InterfacestableQActionRow(source); }
-	public static implicit operator System.Object[](InterfacestableQActionRow source) { return source.ToObjectArray(); }
+	public InterfacesQActionRow() : base(0, 3) { }
+	public InterfacesQActionRow(System.Object[] oRow) : base(0, 3, oRow) { }
+	public static implicit operator InterfacesQActionRow(System.Object[] source) { return new InterfacesQActionRow(source); }
+	public static implicit operator System.Object[](InterfacesQActionRow source) { return source.ToObjectArray(); }
 }
 /// <summary>IDX: 0</summary>
-public class VlantableQActionRow : QActionTableRow
+public class VlansQActionRow : QActionTableRow
 {
 	/// <summary>PID: 301 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Vlanid_301 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	public System.Object Vlansid_301 { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
 	/// <summary>PID: 301 | Type: read</summary>
-	public System.Object Vlanid { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
+	public System.Object Vlansid { get { if (base.Columns.ContainsKey(0)) { return base.Columns[0]; } else { return null; } } set { if (base.Columns.ContainsKey(0)) { base.Columns[0] = value; } else { base.Columns.Add(0, value); } } }
 	/// <summary>PID: 302 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
-	public System.Object Vlanname_302 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public System.Object Vlansname_302 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
 	/// <summary>PID: 302 | Type: read</summary>
-	public System.Object Vlanname { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
-	public VlantableQActionRow() : base(0, 2) { }
-	public VlantableQActionRow(System.Object[] oRow) : base(0, 2, oRow) { }
-	public static implicit operator VlantableQActionRow(System.Object[] source) { return new VlantableQActionRow(source); }
-	public static implicit operator System.Object[](VlantableQActionRow source) { return source.ToObjectArray(); }
+	public System.Object Vlansname { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
+	public VlansQActionRow() : base(0, 2) { }
+	public VlansQActionRow(System.Object[] oRow) : base(0, 2, oRow) { }
+	public static implicit operator VlansQActionRow(System.Object[] source) { return new VlansQActionRow(source); }
+	public static implicit operator System.Object[](VlansQActionRow source) { return source.ToObjectArray(); }
 }
 /// <summary>IDX: 0</summary>
-public class VlanpvsttableQActionRow : QActionTableRow
+public class VlanpvstQActionRow : QActionTableRow
 {
 	/// <summary>PID: 401 | Type: read</summary>
 	[EditorBrowsable(EditorBrowsableState.Never)]
@@ -760,10 +760,10 @@ public class VlanpvsttableQActionRow : QActionTableRow
 	public System.Object Vlanpvststatus_402 { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
 	/// <summary>PID: 402 | Type: read</summary>
 	public System.Object Vlanpvststatus { get { if (base.Columns.ContainsKey(1)) { return base.Columns[1]; } else { return null; } } set { if (base.Columns.ContainsKey(1)) { base.Columns[1] = value; } else { base.Columns.Add(1, value); } } }
-	public VlanpvsttableQActionRow() : base(0, 2) { }
-	public VlanpvsttableQActionRow(System.Object[] oRow) : base(0, 2, oRow) { }
-	public static implicit operator VlanpvsttableQActionRow(System.Object[] source) { return new VlanpvsttableQActionRow(source); }
-	public static implicit operator System.Object[](VlanpvsttableQActionRow source) { return source.ToObjectArray(); }
+	public VlanpvstQActionRow() : base(0, 2) { }
+	public VlanpvstQActionRow(System.Object[] oRow) : base(0, 2, oRow) { }
+	public static implicit operator VlanpvstQActionRow(System.Object[] source) { return new VlanpvstQActionRow(source); }
+	public static implicit operator System.Object[](VlanpvstQActionRow source) { return source.ToObjectArray(); }
 }
 /// <summary>IDX: 0</summary>
 public class PollingmanagerQActionRow : QActionTableRow

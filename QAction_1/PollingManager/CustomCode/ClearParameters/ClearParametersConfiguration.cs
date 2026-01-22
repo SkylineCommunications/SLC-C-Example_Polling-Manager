@@ -11,7 +11,7 @@
 		   .Build();
 
 		public static readonly ClearParameters CpuInfo = new ClearParametersBuilder()
-		   .AddTable(Parameter.Cputable.tablePid)
+		   .AddTable(Parameter.Cpus.tablePid)
 		   .Build();
 
 		public static readonly ClearParameters TemperatureInfo = new ClearParametersBuilder()
@@ -20,15 +20,15 @@
 		   .Build();
 
 		public static readonly ClearParameters InterfacesInfo = new ClearParametersBuilder()
-		   .AddTable(Parameter.Interfacestable.tablePid)
+		   .AddTable(Parameter.Interfaces.tablePid)
 		   .Build();
 
 		public static readonly ClearParameters VlanInfo = new ClearParametersBuilder()
-		   .AddTable(Parameter.Vlantable.tablePid)
+		   .AddTable(Parameter.Vlans.tablePid)
 		   .Build();
 
 		public static readonly ClearParameters PvstInfo = new ClearParametersBuilder()
-			   .AddTable(Parameter.Vlanpvsttable.tablePid)
+			   .AddTable(Parameter.Vlanpvst.tablePid)
 			   .Build();
 
 		private const string NotAvailable = "-1";

@@ -1,47 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
-
-****************************************************************************
-*  Copyright (c) 2024,  Skyline Communications NV  All Rights Reserved.    *
-****************************************************************************
-
-By using this driver, you expressly agree with the usage terms and
-conditions set out below.
-This driver and all related materials are protected by copyrights and
-other intellectual property rights that exclusively belong
-to Skyline Communications.
-
-A user license granted for this driver is strictly for personal use only.
-This driver may not be used in any way by anyone without the prior
-written consent of Skyline Communications. Any sublicensing of this
-driver is forbidden.
-
-Any modifications to this driver by the user are only allowed for
-personal use and within the intended purpose of the driver,
-and will remain the sole responsibility of the user.
-Skyline Communications will not be responsible for any damages or
-malfunctions whatsoever of the driver resulting from a modification
-or adaptation by the user.
-
-The content of this driver is confidential information.
-The user hereby agrees to keep this confidential information strictly
-secret and confidential and not to disclose or reveal it, in whole
-or in part, directly or indirectly to any person, entity, organization
-or administration without the prior written consent of
-Skyline Communications.
-
-Any inquiries can be addressed to:
-
-	Skyline Communications NV
-	Ambachtenstraat 33
-	B-8870 Izegem
-	Belgium
-	Tel.	: +32 51 31 35 69
-	Fax.	: +32 51 31 01 29
-	E-mail	: info@skyline.be
-	Web		: www.skyline.be
-	Contact	: Ben Vandenberghe
-
+***********************************************
+*  Copyright (c), Skyline Communications NV.  *
+***********************************************
 -->
 
 <Protocol xmlns="http://www.skyline.be/protocol">
@@ -53,10 +14,10 @@ Any inquiries can be addressed to:
 	<Vendor>Skyline Example</Vendor>
 	<VendorOID>1.3.6.1.4.1.8813.2.1218</VendorOID>
 	<DeviceOID>10</DeviceOID>
+	<SNMP includepages="true">auto</SNMP>
 	<ElementType>Example</ElementType>
 	<Type relativeTimers="true">virtual</Type>
 	<Display defaultPage="General" pageOrder="General;----------;System;CPU;Temperature;----------;Interfaces;VLAN;----------;Element Settings" wideColumnPages="System;CPU;Element Settings"/>
-	<SNMP includepages="true">auto</SNMP>
 
 	<Compliancies>
 		<CassandraReady>true</CassandraReady>
@@ -290,9 +251,10 @@ This should only be used when applicable and on applicable data sets.
 				<Type>number</Type>
 			</Measurement>
 		</Param>
+		
 		<Param id="100">
-			<Name>CpuTable</Name>
-			<Description>CPU</Description>
+			<Name>CPUs</Name>
+			<Description>CPUs</Description>
 			<Type>array</Type>
 			<ArrayOptions index="0"  options=";volatile">
 				<ColumnOption idx="0" pid="101" type="retrieved" options=""/>
@@ -317,8 +279,8 @@ This should only be used when applicable and on applicable data sets.
 			</Measurement>
 		</Param>
 		<Param id="101" trending="false">
-			<Name>CpuTableInstance</Name>
-			<Description>Instance (CPU)</Description>
+			<Name>CPUsInstance</Name>
+			<Description>Instance (CPUs)</Description>
 			<Type>read</Type>
 			<Information>
 				<Subtext>This is the key used internally by DataMiner to identify the table entries.</Subtext>
@@ -336,8 +298,8 @@ This should only be used when applicable and on applicable data sets.
 			</Measurement>
 		</Param>
 		<Param id="102" trending="false">
-			<Name>CpuTableDescription</Name>
-			<Description>Description (CPU)</Description>
+			<Name>CPUsDescription</Name>
+			<Description>Description (CPUs)</Description>
 			<Type>read</Type>
 			<Information>
 				<Subtext>Dummy Description</Subtext>
@@ -355,8 +317,8 @@ This should only be used when applicable and on applicable data sets.
 			</Measurement>
 		</Param>
 		<Param id="103" trending="false">
-			<Name>CpuTableTotal</Name>
-			<Description>Total (CPU)</Description>
+			<Name>CPUsTotal</Name>
+			<Description>Total (CPUs)</Description>
 			<Type>read</Type>
 			<Information>
 				<Subtext>Dummy Total</Subtext>
@@ -378,8 +340,9 @@ This should only be used when applicable and on applicable data sets.
 				<Type>number</Type>
 			</Measurement>
 		</Param>
+		
 		<Param id="200">
-			<Name>InterfacesTable</Name>
+			<Name>Interfaces</Name>
 			<Description>Interfaces</Description>
 			<Type>array</Type>
 			<ArrayOptions index="0"  options=";volatile">
@@ -471,9 +434,10 @@ This should only be used when applicable and on applicable data sets.
 				</Discreets>
 			</Measurement>
 		</Param>
+		
 		<Param id="300">
-			<Name>VlanTable</Name>
-			<Description>VLAN</Description>
+			<Name>Vlans</Name>
+			<Description>VLANs</Description>
 			<Type>array</Type>
 			<ArrayOptions index="0" options=";volatile">
 				<ColumnOption idx="0" pid="301" type="retrieved" options="" />
@@ -497,8 +461,8 @@ This should only be used when applicable and on applicable data sets.
 			</Measurement>
 		</Param>
 		<Param id="301" trending="false">
-			<Name>VlanId</Name>
-			<Description>ID (VLAN)</Description>
+			<Name>VlansId</Name>
+			<Description>ID (VLANs)</Description>
 			<Type>read</Type>
 			<Information>
 				<Subtext>This is the key used internally by DataMiner to identify the table entries.</Subtext>
@@ -516,8 +480,8 @@ This should only be used when applicable and on applicable data sets.
 			</Measurement>
 		</Param>
 		<Param id="302" trending="false">
-			<Name>VlanName</Name>
-			<Description>Name (VLAN)</Description>
+			<Name>VlansName</Name>
+			<Description>Name (VLANs)</Description>
 			<Type>read</Type>
 			<Information>
 				<Subtext>Dummy Name</Subtext>
@@ -534,8 +498,9 @@ This should only be used when applicable and on applicable data sets.
 				<Type>string</Type>
 			</Measurement>
 		</Param>
+		
 		<Param id="400">
-			<Name>VlanPvstTable</Name>
+			<Name>VlanPvst</Name>
 			<Description>VLAN PVST+ Info</Description>
 			<Type>array</Type>
 			<ArrayOptions index="0" options=";volatile">
@@ -607,6 +572,7 @@ This should only be used when applicable and on applicable data sets.
 				</Discreets>
 			</Measurement>
 		</Param>
+		
 		<Param id="990">
 			<Name>PollingManager_RunQAction</Name>
 			<Description>Polling Manager - Run QAction</Description>
@@ -1043,8 +1009,9 @@ Note this will correspond to the default interval for data sets for which pollin
 				<Type options="datetime">number</Type>
 			</Measurement>
 		</Param>
+		
 		<Param id="61001">
-			<Name>Process_System_Information</Name>
+			<Name>ProcessSystemInformation</Name>
 			<Description>Process System Information</Description>
 			<Type>read</Type>
 			<Interprete>
@@ -1054,7 +1021,7 @@ Note this will correspond to the default interval for data sets for which pollin
 			</Interprete>
 		</Param>
 		<Param id="61002">
-			<Name>Process_Temperature_Information</Name>
+			<Name>ProcessTemperatureInformation</Name>
 			<Description>Process Temperature Information</Description>
 			<Type>read</Type>
 			<Interprete>
@@ -1068,6 +1035,7 @@ Note this will correspond to the default interval for data sets for which pollin
 	<QActions>
 		<QAction id="1" name="Precompiled Code" encoding="csharp" options="precompile" />
 		<QAction id="2" name="After Startup" encoding="csharp" triggers="2" />
+		
 		<QAction id="990" name="Polling Manager - Process" encoding="csharp" triggers="990" />
 		<QAction id="997" name="Polling Manager - ContextMenu" encoding="csharp" triggers="997" />
 		<QAction id="1050" name="Polling Manager - Sets" encoding="csharp" triggers="1054;1056;1057" row="true" />
@@ -1217,7 +1185,7 @@ Note this will correspond to the default interval for data sets for which pollin
 							<MajorVersion id="0">
 								<MinorVersions>
 									<MinorVersion id="1">
-										<Date>2024-04-10</Date>
+										<Date>2026-01-22</Date>
 										<Provider>
 											<Author>ESU</Author>
 											<Company>Skyline Communications</Company>
@@ -1225,6 +1193,9 @@ Note this will correspond to the default interval for data sets for which pollin
 										<Changes>
 											<NewFeature>Initial version</NewFeature>
 										</Changes>
+										<References>
+											<TaskId>222440</TaskId>
+										</References>
 									</MinorVersion>
 								</MinorVersions>
 							</MajorVersion>

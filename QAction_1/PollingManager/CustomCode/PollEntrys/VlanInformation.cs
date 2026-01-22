@@ -20,20 +20,20 @@
 			// Add Custom poll logic here if needed
 			Protocol.Log($"Polling '{Name}'.");
 			int dummyRows = 5;
-			List<VlantableQActionRow> tableRows = new List<VlantableQActionRow>();
+			List<VlansQActionRow> tableRows = new List<VlansQActionRow>();
 
 			for (int i = 0; i < dummyRows; i++)
 			{
-				var row = new VlantableQActionRow
+				var row = new VlansQActionRow
 				{
-					Vlanid_301 = $"{i + 1000}",
-					Vlanname_302 = $"VLAN{i + 1000}",
+					Vlansid_301 = $"{i + 1000}",
+					Vlansname_302 = $"VLAN{i + 1000}",
 				};
 
 				tableRows.Add(row);
 			}
 
-			Protocol.FillArray(Parameter.Vlantable.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
+			Protocol.FillArray(Parameter.Vlans.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
 		}
 
 		protected override void PrePollConfiguration()

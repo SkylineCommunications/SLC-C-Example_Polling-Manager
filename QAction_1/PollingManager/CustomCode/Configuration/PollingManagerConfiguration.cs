@@ -97,8 +97,8 @@
 		/// </summary>
 		protected override void CreateResponseHandlers()
 		{
-			ResponseHandlers.Add(Parameter.process_system_information_61001, new ResponseSystemInformation(PollEntrys.System));
-			ResponseHandlers.Add(Parameter.process_temperature_information_61002, new ResponseTemperature(PollEntrys.Temperature));
+			ResponseHandlers.Add(Parameter.processsysteminformation_61001, new ResponseSystemInformation(PollEntrys.System));
+			ResponseHandlers.Add(Parameter.processtemperatureinformation_61002, new ResponseTemperature(PollEntrys.Temperature));
 		}
 
 		/// <summary>

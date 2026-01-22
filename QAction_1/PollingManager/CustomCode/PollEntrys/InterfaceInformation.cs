@@ -21,12 +21,12 @@
 			// Add Custom poll logic here if needed
 			Protocol.Log($"Polling '{Name}'.");
 			int dummyRows = 10;
-			List<InterfacestableQActionRow> tableRows = new List<InterfacestableQActionRow>();
+			List<InterfacesQActionRow> tableRows = new List<InterfacesQActionRow>();
 			Random random = new Random();
 
 			for (int i = 0; i < dummyRows; i++)
 			{
-				var row = new InterfacestableQActionRow
+				var row = new InterfacesQActionRow
 				{
 					Interfacesinstance_201 = $"{i}",
 					Interfacesdescription_202 = $"Ethernet{i}",
@@ -36,7 +36,7 @@
 				tableRows.Add(row);
 			}
 
-			Protocol.FillArray(Parameter.Interfacestable.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
+			Protocol.FillArray(Parameter.Interfaces.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
 		}
 
 		protected override void PrePollConfiguration()

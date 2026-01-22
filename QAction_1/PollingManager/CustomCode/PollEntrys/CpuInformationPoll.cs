@@ -21,22 +21,22 @@
 			// Add Custom poll logic here if needed
 			Protocol.Log($"Polling '{Name}'.");
 			int dummyRows = 4;
-			List<CputableQActionRow> tableRows = new List<CputableQActionRow>();
+			List<CpusQActionRow> tableRows = new List<CpusQActionRow>();
 			Random random = new Random();
 
 			for (int i = 0; i < dummyRows; i++)
 			{
-				var row = new CputableQActionRow
+				var row = new CpusQActionRow
 				{
-					Cputableinstance_101 = $"{i}",
-					Cputabledescription_102 = $"Dummy Entry {i}",
-					Cputabletotal_103 = random.Next(60, 71),
+					Cpusinstance_101 = $"{i}",
+					Cpusdescription_102 = $"Dummy Entry {i}",
+					Cpustotal_103 = random.Next(60, 71),
 				};
 
 				tableRows.Add(row);
 			}
 
-			Protocol.FillArray(Parameter.Cputable.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
+			Protocol.FillArray(Parameter.Cpus.tablePid, tableRows.Select(r => r.ToObjectArray()).ToList(), NotifyProtocol.SaveOption.Full);
 		}
 
 		protected override void PrePollConfiguration()
